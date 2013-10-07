@@ -1,27 +1,20 @@
 
 \section{Sensitivity Metrics}
 \label{sec:sensitivity}
-\subsection{Introduction}
 
 
-Many computational scientists develop and use large-scale, loosely-coupled applications that are often structured as scientific workflows, which consist of many computational tasks with data dependencies between them. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist~\cite{Chen2011, Prodan2008b, Dong2010, Yang03, WorkflowSim} and the problem of choosing robust schedules becomes more and more important. Traditionally, a carefully crafted schedule is based on deterministic or statistic estimates for the execution time of computational activities that compose a workflow. However, in such an environment, this approach may prove to be grossly inefficient~\cite{WorkflowSim}, as a result of various unpredictable overheads that may occur at runtime. 
+Many computational scientists develop and use large-scale, loosely-coupled applications that are often structured as scientific workflows, which consist of many computational tasks with data dependencies between them. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist~\cite{Chen2011, Prodan2008, Dong2010, Yang03, Chen2012a} and the problem of choosing robust schedules becomes more and more important. Traditionally, a carefully crafted schedule is based on deterministic or statistic estimates for the execution time of computational activities that compose a workflow. However, in such an environment, this approach may prove to be grossly inefficient~\cite{Chen2012a}, as a result of various unpredictable overheads that may occur at runtime. 
 %Particularly, it is challenging to provide a good estimate of overheads since it involves a lot of uncertainties. 
 Thus, to mitigate the impact of uncertain overheads, it is necessary to choose a schedule that guarantees overhead robustness, that is, a schedule that is affected as little as possible by various overhead changes.  
 
-There are several ways to achieve overhead robustness. A first approach is to integrate the overhead estimation into the job scheduling problem. A static or statistic estimation of communication cost or data transfer delay~\cite{Dong2010, Yang03} has been considered in the scheduling problem. Once we have the deterministic or statistic information of overheads, we can treat the system overhead as computational activities and the goal is to minimize the overall runtime including overhead duration. However, this approach only applies to the estimation of data transfer delay since the highly unpredictable variability and variety of other overheads make it a challenging work and not efficient in practice. Our prior work~\cite{Chen} has shown the variation of overheads may be comparable to the job runtime and thus makes it unrealistic in a real environment.  
+There are several ways to achieve overhead robustness. A first approach is to integrate the overhead estimation into the job scheduling problem. A static or statistic estimation of communication cost or data transfer delay~\cite{Dong2010, Yang03} has been considered in the scheduling problem. Once we have the deterministic or statistic information of overheads, we can treat the system overhead as computational activities and the goal is to minimize the overall runtime including overhead duration. However, this approach only applies to the estimation of data transfer delay since the highly unpredictable variability and variety of other overheads make it a challenging work and not efficient in practice. Our prior work~\cite{Chen2011} has shown the variation of overheads may be comparable to the job runtime and thus makes it unrealistic in a real environment.  
 
-A significant amount of work~\cite{Ahmad1998, Chetto1990, Dong2010, Yang03} in the literature has focused on proposing algorithms that are aware of the dynamic changes of runtime environments. Task rescheduling~\cite{Sakellariou2004, Zhang2009, Chen2010} is a typical approach that dynamically allocates tasks to an idle processor in order to take into account information that has been made available during the execution. Specifically, resource load~\cite{Dong2010} can be used to estimate the variance. However, rescheduling a task is costly as it implies some extra communication and synchronization costs. Relevant studies~\cite{Sakellariou2004} indicate that it is important to have a static schedule with good properties before the start of the execution. Therefore, even if a dynamic strategy is used, a good initial placement would reduce the possibility of making a bad decision. 
+A significant amount of work~\cite{Chetto1990, Dong2010, Yang03} in the literature has focused on proposing algorithms that are aware of the dynamic changes of runtime environments. Task rescheduling~\cite{Sakellariou2004, Zhang2009a} is a typical approach that dynamically allocates tasks to an idle processor in order to take into account information that has been made available during the execution. Specifically, resource load~\cite{Dong2010} can be used to estimate the variance. However, rescheduling a task is costly as it implies some extra communication and synchronization costs. Relevant studies~\cite{Sakellariou2004} indicate that it is important to have a static schedule with good properties before the start of the execution. Therefore, even if a dynamic strategy is used, a good initial placement would reduce the possibility of making a bad decision. 
 
-Another approach is to overestimate the execution time of individual jobs. Delay scheduling~\cite{Zaharia10} waits for a small amount of time, letting other MapReduce jobs launch tasks instead and this method can achieve a better tradeoff of locality and fairness. However, this method only applies to workload scheduling and particularly MapReduce jobs since the duration of them is short and thus it is not difficult to estimate the scheduling delay. Also, this results in a waste of resources as it induces a lot of idle time during the execution, if the overhead is shorter than the estimation. Second, overheads do not simply work as an attachment to the job runtime and it involves a lot more complicated patterns such as periodicity~\cite{Chen}. 
+Another approach is to overestimate the execution time of individual jobs. Delay scheduling~\cite{Zaharia2010} waits for a small amount of time, letting other MapReduce jobs launch tasks instead and this method can achieve a better tradeoff of locality and fairness. However, this method only applies to workload scheduling and particularly MapReduce jobs since the duration of them is short and thus it is not difficult to estimate the scheduling delay. Also, this results in a waste of resources as it induces a lot of idle time during the execution, if the overhead is shorter than the estimation. Second, overheads do not simply work as an attachment to the job runtime and it involves a lot more complicated patterns such as periodicity~\cite{Chen2011}. 
 
-In this paper, we first present our work on evaluating the overhead robustness of scheduling heuristics and we indicate a list of heuristics that are overhead robust even without an estimate of the overhead duration. Second, since the estimate of overhead duration is difficult, we develop new heuristics that leverage the pattern information of workflow overheads, which represents a new approach to design overhead robust algorithms. To the best of our knowledge, so far, no study has systematically tried to evaluate the scheduling heuristics with respect to the overhead robustness.  
+In this section, we first present our work on evaluating the overhead robustness of scheduling heuristics and we indicate a list of heuristics that are overhead robust even without an estimate of the overhead duration. Second, since the estimate of overhead duration is difficult, we develop new heuristics that leverage the pattern information of workflow overheads, which represents a new approach to design overhead robust algorithms. To the best of our knowledge, so far, no study has systematically tried to evaluate the scheduling heuristics with respect to the overhead robustness.  
 
-
-
-%Braun paper
-%Opportunistic Load Balancing, Minimum Execution Time, Minimum Completion Time, Min-min, Max-min, Duplex, Genetic Algorithm, Simulated Annealing, Genetic Simulated Annealing, Tabu, and A*
-
-%The 11 static mapping heuristics were evaluated using simulated execution times for an HC environment. Because these are static heuristics, it is assumed that an accurate estimate of the expected execution time for each task on each machine is known prior to execution and contained within a  ETC (expected time to compute) matrix. The assumption that these estimated expected execution times are known is commonly made when studying mapping heuristics for HC systems (e.g., [19, 26, 40]). (Approaches for doing this estimation based on task profiling and analytical benchmarking are discussed in [27, 30, 37].)
 
 
 \subsection{Overhead Patterns}
@@ -35,86 +28,63 @@ The motivation for pattern based analysis comes from the observation that for th
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=1\linewidth]{figure/adherence.pdf}
+ \includegraphics[width=1\linewidth]{figures/sensitivity/adherence.pdf}
   \captionof{figure}{Adherence Pattern}
-  \label{fig:adhere}
-  \vspace{-10pt}
+  \label{fig:sensitivity_adhere}
 \end{figure}
 
-Most of the work~\cite{Dong2010, Yang03} view the overhead duration as an attachment to runtime in workflow timeline. For example, the Pre/Post-script Delay is usually constant, which we call it Adherence Pattern as shown in Fig.~\ref{fig:adhere}. Scheduling algorithms can just add the delay to the job runtime without significant change to the algorithms. For this pattern, we have shown in our prior work~\cite{Chen} that it does not have much influence on the overhead robustness. 
-However, we observe that the Workflow Engine Delay and the Queue Delay increases periodically and steadily. For example, Fig.~\ref{fig:trace} shows the Gantt chart of part of a real trace\footnote{Details: http://www.isi.edu/\string~wchen/fgrid/run}. 
+Most of the work~\cite{Dong2010, Yang03} view the overhead duration as an attachment to runtime in workflow timeline. For example, the Pre/Post-script Delay is usually constant, which we call it Adherence Pattern as shown in Fig.~\ref{fig:sensitivity_adhere}. Scheduling algorithms can just add the delay to the job runtime without significant change to the algorithms. For this pattern, we have shown in our prior work~\cite{Chen2012a} that it does not have much influence on the overhead robustness. 
+However, we observe that the Workflow Engine Delay and the Queue Delay increases periodically and steadily. For example, Fig.~\ref{fig:sensitivity_trace} shows the Gantt chart of part of a real trace\footnote{Details: http://www.isi.edu/\string~wchen/fgrid/run}. 
 The Workflow Engine Delay (red) of the first 16 jobs is 5 seconds and then it increases to 10 seconds. 
 %It is difficult to explain queue delay
 We call this common overhead pattern the Incremental and Periodical Pattern (IPP). We observe the Queue Delay also increases periodically but the period is interrupted by the resource availability and thus it has a more complicated IPP. In the rest of this paper, we focus on the IPP of the Workflow Engine Delay and we will cover the Queue Delay in our future work. 
-The reason why IPP prevalently exists is that many workflow management components are queue based systems. They repeatedly check their queues to find whether there are idle jobs, if yes they will process and submit these jobs, otherwise it will wait for a interval and continue. In Fig.~\ref{fig:ipp} we abstract the IPP from the trace, which shows a repeatedly increase by a interval. We define throughput of a workflow management component as the maximum number of allowed jobs in queue. For example, the interval and the throughput of the Workflow Engine in Fig.~\ref{fig:trace} are around 5 seconds and 16 respectively. 
+The reason why IPP prevalently exists is that many workflow management components are queue based systems. They repeatedly check their queues to find whether there are idle jobs, if yes they will process and submit these jobs, otherwise it will wait for a interval and continue. In Fig.~\ref{fig:sensitivity_ipp} we abstract the IPP from the trace, which shows a repeatedly increase by a interval. We define throughput of a workflow management component as the maximum number of allowed jobs in queue. For example, the interval and the throughput of the Workflow Engine in Fig.~\ref{fig:sensitivity_trace} are around 5 seconds and 16 respectively. 
 
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=1\linewidth]{figure/trace.pdf}
+ \includegraphics[width=1\linewidth]{figures/sensitivity/trace.pdf}
   \captionof{figure}{Workflow Execution Gantt Chart of a Real Trace}
-  \label{fig:trace}
-  \vspace{-10pt}
+  \label{fig:sensitivity_trace}
 \end{figure}
 
-
-
-%Some representative time series, including marketing time series, temperature time series and quality control time series, are effectively applied in various scientific and business domains [6][7]. Similarly, 
-
-%Current forecasting strategies for computation tasks mainly reside on the prediction of CPU load [1][15], however, this is quite different from the prediction of scientific workflow activity durations.Activity durations cover the time intervals from the initial submission to the final completion of each workflow activity [3]. Hence, besides the exact execution time on scheduled resources, they also consist of extra time, i.e. scientific workflow overheads. According to [11], there exist four main categories of scientific workflow overheads, i.e. middleware overhead, data transfer overhead, loss of parallelism overhead and activity related overhead. Evidently, scientific workflow activity durations involve much more affecting factors than that of conventional computation tasks which are dominated by high performance computing resources.scientific workflow activity durations denote discrete long-term intervals since activity instances only occur occasionally and take several minutes or more than a couple of hours to complete.
-
-%The motivation for pattern based time-series forecasting comes from the observation that for those duration-series segments where the number of concurrent activity instances is similar, these activity durations reveal comparable statistical features. 
 
 These overhead patterns reappear frequently during a duration series and they represent unique behavior of the workflow management components. After we define and discover these typical patterns, the intervals and throughputs of these patterns can be estimated and statistically captured from historical traces. 
 
 
-
-%Furthermore, if these overhead patterns reappear frequently during a duration series, they can be deemed as potential patterns which represent unique behavior of the duration-series under certain circumstances. Therefore, if we are able to define and discover these typical patterns, the intervals of future durations can be estimated with the statistical features of the closest patterns by matching the latest duration sequences. 
-
-
-
-
-
 \begin{figure}[htb]
 \centering
- \includegraphics[width=1\linewidth]{figure/incremental.pdf}
+ \includegraphics[width=1\linewidth]{figures/sensitivity/incremental.pdf}
   \captionof{figure}{Incremental and Periodical Pattern}
-  \label{fig:ipp}
-  \vspace{-10pt}
+  \label{fig:sensitivity_ipp}
 \end{figure}
 
 %It is not workflow engine delay it is workflow engine interval
-\section{Overhead Robust Heuristics}
+\subsection{Overhead Robust Heuristics}
 \label{sec:heuristics}
 In this section, we introduce the overhead robustness of four pairs of scheduling heuristics. Heuristics are widely used in workflow scheduling since the scheduling problem is a NP-hard problem and the time complicity of a global optimization of the overall runtime is not affordable. Usually, heuristics utilize unique features of workflows or resources to guide the mapping of jobs to resources. For example, both of the MINMIN~\cite{Blythe2005} algorithm and the MAXMIN~\cite{Braun2001} algorithm utilize the runtime of a job as the feature. However, they conduct the mapping in an opposite way, that is, MINMIN chooses the job with the shortest runtime while MAXMIN chooses the job with the longest runtime. Intuitively speaking, there must be either of them (we call it overhead robust) that performs better than the other one (we call it overhead unrobust) since they operates oppositely. Inspired by these coupling heuristics, we use a relative overhead robustness approach to evaluate these scheduling heuristics. For a pair of heuristics that use the same feature, we define the relative overhead robustness as the performance gain of the overhead robust heuristic against the other one. The more performance gain we have, the more significant this feature has on the overhead robustness. Also, it is not fair to compare scheduling heuristics that use different features because they may have vastly different performance even without overheads. Furthermore, in practice, we can use scheduling heuristics with different features at the same time but not those with the same features. 
 Below we introduce the four pairs of scheduling heuristics including one that we propose. 
 
-%OLB: Opportunistic Load Balancing (OLB) assigns each task, in arbitrary order, to the next machine that is expected to be available, regardless of the task's expected execution time on that machine [3, 17, 18]. The intuition behind OLB is to keep all machines as busy as possible. One advantage of OLB is its simplicity, but because OLB does not consider expected task execution times, the mappings it finds can result in very poor makespans.
-%MET: In contrast to OLB, Minimum Execution Time ( MET ) assigns each task, in arbitrary order, to the machine with the best expected execution time for that task, regardless of that machine's availability [3, 17]. The motivation behind MET is to give each task to its best machine. This can cause a severe load imbalance across machines. In general, this heuristic is obviously not applicable to HC environments characterized by consistent ETC matrices.
-%MCT: Minimum Completion Time (MCT) assigns each task, in arbitrary order, to the machine with the minimum expected completion time for that task [3]. This causes some tasks to be assigned to machines that do not have the minimum execution time for them. The intuition behind MCT is to combine the benefits of OLB and MET, while avoiding the circumstances in which OLB and MET perform poorly.
 
 \emph{MINMIN} and \emph{MAXMIN}: The MINMIN heuristic begins with a set of all unmapped jobs. Then, the set of minimum completion times for each job, M namely, is found. Next, the job with the overall minimum completion time from M is selected and assigned to the corresponding resource (hence the name MINMIN). Last, the newly mapped job is removed from the unmapped jobs, and the process repeats until all jobs are mapped. 
-%Minin maps the tasks in the order that changes the machine availability status by the least amount that any assignment could. Let ti be the first task mapped by Minin onto an empty system. The machine that finishes ti the earliest, say mj , is also the machine that executes ti the fastest. For every task that MINMIN maps after ti, the Minin heuristic changes the availability status of mj by the least possible amount for every assignment. Therefore, the percentage of tasks assigned to their first choice (on the basis of execution time) is likely to be higher for Minmin than for Maxin (defined next). The expectation is that a smaller makespan can be obtained if more tasks are assigned to the machines that complete them the earliest and also execute them the fastest.
 The MAXMIN heuristic is very similar to MINMIN. The MAXMIN heuristic also begins with the set of all unmapped jobs. Then, the set of minimum completion times, M, is found. Next, the job with the overall maximum completion time from M is selected and assigned to the corresponding resource (hence the name MAXMIN). Last, the newly mapped job is removed from the unmapped jobs, and the process repeats until all jobs are mapped. 
-Intuitively speaking, we believe MAXMIN has better overhead robustness than MINMIN. As shown in Fig.~\ref{fig:longest}, assuming we have two jobs and the interval of the overhead is 1. MAXMIN releases a job with longer runtime first, which can overlap with the increment of the overheads when MAXMIN releases the other job. However, the performance gain depends on the values of overhead interval, job runtime, overhead duration and the resource availability. 
+Intuitively speaking, we believe MAXMIN has better overhead robustness than MINMIN. As shown in Fig.~\ref{fig:sensitivity_longest}, assuming we have two jobs and the interval of the overhead is 1. MAXMIN releases a job with longer runtime first, which can overlap with the increment of the overheads when MAXMIN releases the other job. However, the performance gain depends on the values of overhead interval, job runtime, overhead duration and the resource availability. 
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=1.0\linewidth]{figure/longest.pdf}
+ \includegraphics[width=1.0\linewidth]{figures/sensitivity/longest.pdf}
   \captionof{figure}{MAXMIN vs. MINMIN}
-  \label{fig:longest}
-  \vspace{-10pt}
+  \label{fig:sensitivity_longest}
 \end{figure}
-\emph{Breadth First} and \emph{Depth First}: Namely, the Breadth First (BFS) algorithm iterates the jobs at the same workflow level (or depth within a workflow directed acyclic graph) first while the Depth First (DFS) algorithm iterates the jobs at the deepest workflow level first. Intuitively speaking, we believe BFS performs better than DFS in terms of overhead robustness since BFS releases more jobs at the same workflow level for most scientific workflows as shown in Fig.~\ref{fig:shape}. Therefore, with enough jobs in queue, BFS can fully utilize the resources without wasting this overhead interval.  
+\emph{Breadth First} and \emph{Depth First}: Namely, the Breadth First (BFS) algorithm iterates the jobs at the same workflow level (or depth within a workflow directed acyclic graph) first while the Depth First (DFS) algorithm iterates the jobs at the deepest workflow level first. Intuitively speaking, we believe BFS performs better than DFS in terms of overhead robustness since BFS releases more jobs at the same workflow level for most scientific workflows as shown in Fig.~\ref{fig:sensitivity_shape}. Therefore, with enough jobs in queue, BFS can fully utilize the resources without wasting this overhead interval.  
 
 \emph{Fertile First} and \emph{Unfertile First}: The Fertile First (FFS) algorithm sorts all the unmapped jobs based on the number of children jobs that they have and assigns the jobs with most children jobs first. The Unfertile First (UFFS) algorithm works in the opposite way and assigns the jobs with lest children jobs first. Similar to the case of BFS and DFS, we believe FFS should perform better than UFFS since FFS releases more jobs at the next level compared to UFFS and thus FFS can fully utilize the available resources. 
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=0.6\linewidth]{figure/impact_factor.pdf}
+ \includegraphics[width=0.6\linewidth]{figures/sensitivity/impact_factor.pdf}
   \captionof{figure}{Impact Factor}
-  \label{fig:impact}
-  \vspace{-10pt}
+  \label{fig:sensitivity_impact}
 \end{figure}
 
 \emph{Important First} and \emph{Unimportant First}: Here we propose a pair of Impact Factor based scheduling heuristics. The Important First (IFS) algorithm sorts all the unmapped jobs based on their \emph{Impact Factor} (IF) and assigns the jobs with the largest IF first while the Unimportant First (UIFS) algorithm assigns the jobs with the smallest IF first. 
@@ -123,7 +93,7 @@ The \textbf{Impact Factor} ($IF$) of a job $j_u$ is defined as follows:
 \begin{equation}
 	IF(j_u)=\sum_{j_v\in Child(j_u)}^{}\frac{IF(j_v)}{L(j_v)}
 \end{equation}
-where $Child(j_u)$ denotes the set of child jobs of $j_u$, and $L(j_v)$ the number of parent jobs of $j_v$. For simplicity, we assume the $IF$ of a workflow exit job (e.g. $j_7$ in Fig.~\ref{fig:impact}) as 1.0. For instance, consider the workflow in Fig.~\ref{fig:impact}. $IF$ for $j_1$, $j_2$, $j_3$, and $j_4$ are computed as follows:
+where $Child(j_u)$ denotes the set of child jobs of $j_u$, and $L(j_v)$ the number of parent jobs of $j_v$. For simplicity, we assume the $IF$ of a workflow exit job (e.g. $j_7$ in Fig.~\ref{fig:sensitivity_impact}) as 1.0. For instance, consider the workflow in Fig.~\ref{fig:sensitivity_impact}. $IF$ for $j_1$, $j_2$, $j_3$, and $j_4$ are computed as follows:
 
 \begin{eqnarray}
 	\displaystyle  
@@ -137,7 +107,7 @@ Similar to the case of FFS and UFFS, we believe IFS has a better overhead robust
 
 
 %The idea of these overhead aware heuristics is we would like to improve the overhead robustness even when we are not able to precisely predict the duration of overheads. Instead, workflow overheads have common patterns, which can determine the relative performance of different heuristics. 
-Table~\ref{tab:heuristics} summaries the heuristics and their potential overhead robustness. 
+Table~\ref{tab:sensitivity_heuristics} summaries the heuristics and their potential overhead robustness. 
 \begin{table}[H]
 \caption{Scheduling Heuristics}
 \begin{center}
@@ -150,25 +120,21 @@ Heuristics & Overhead Robust & Overhead Unrobust \\ \hline
 Experiment 4 & IFS & UIFS\\
     \hline
   \end{tabular}
-\label{tab:heuristics}
+\label{tab:sensitivity_heuristics}
 \end{center}
 \end{table}
 
 % Section
-\section{Experiment and Evaluation}
+\subsection{Experiment Conditions}
 
 
 The experiments presented hereafter evaluate the performance of the four pairs of heuristics mentioned ahead, which are widely used by workflow management systems. 
-
-\subsection{Experiment Conditions}
-
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figure/shape.pdf} 
 	\caption{A simplified visualization of the Broadband workflow, the Montage workflow and the CyberShake workflow.}
 	\label{fig:shape}
-	\vspace{-10pt}
 \end{figure}
 
 We extended the WorkflowSim~\cite{WorkflowSim} simulator with the overhead model to simulate a distributed environment where we could evaluate the overhead robustness of scheduling algorithms when varying the average overheads and throughput. As an initial attempt, we focus on the workflow engine delay ($d$) in this paper. The simulated computing platform is composed by 20 single core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Each machine has 512MB of memory and the capacity to process 1,000 million instructions per second. 
@@ -187,7 +153,7 @@ Montage~\cite{Sakellariou2010} is an astronomy application used to construct lar
 
 
 
-Four sets of experiments are conducted. Experiment 1 evaluates the relative robustness of MAXMIN and MINMIN by comparing the performance gain of the overhead robust heuristic (MAXMIN in this experiment) over the overhead unrobust heuristic (MINMIN), while varying the average interval of workflow engine ($d$) and throughput of workflow engine ($t$). Table~\ref{tab:heuristics} shows the heuristics compared in these experiments. Simulation results present a confidence level of 95\%. Thus, for values of \emph{Performance Gain} $> 0$, the overhead robust heuristics perform better than the respective overhead unrobust heuristics. Otherwise, the overhead robust heuristics perform poorer.
+Four sets of experiments are conducted. Experiment 1 evaluates the relative robustness of MAXMIN and MINMIN by comparing the performance gain of the overhead robust heuristic (MAXMIN in this experiment) over the overhead unrobust heuristic (MINMIN), while varying the average interval of workflow engine ($d$) and throughput of workflow engine ($t$). Table~\ref{tab:sensitivity_heuristics} shows the heuristics compared in these experiments. Simulation results present a confidence level of 95\%. Thus, for values of \emph{Performance Gain} $> 0$, the overhead robust heuristics perform better than the respective overhead unrobust heuristics. Otherwise, the overhead robust heuristics perform poorer.
 %We randomly select 20\% from LIGO workflow tasks and increase their task runtime by a factor of \emph{Ratio} to simulate the system variation in a production environment.
 
 
@@ -202,7 +168,6 @@ In these experiment sets, we vary the average throughput of workflow engine from
  \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-Broadband.pdf}
   \captionof{figure}{Broadband }
   \label{fig:MAX-MIN-Broadband}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -210,7 +175,6 @@ In these experiment sets, we vary the average throughput of workflow engine from
  \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-CyberShake.pdf}
   \captionof{figure}{CyberShake}
   \label{fig:MAX-MIN-CyberShake}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -218,7 +182,6 @@ In these experiment sets, we vary the average throughput of workflow engine from
  \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-Montage.pdf}
   \captionof{figure}{Montage}
   \label{fig:MAX-MIN-Montage}
-  \vspace{-10pt}
 \end{figure}
 
 
@@ -229,7 +192,6 @@ Experiment 1: Fig.~\ref{fig:MAX-MIN-Broadband},~\ref{fig:MAX-MIN-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-Broadband.pdf}
   \captionof{figure}{Broadband }
   \label{fig:DFS-BFS-Broadband}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -237,7 +199,6 @@ Experiment 1: Fig.~\ref{fig:MAX-MIN-Broadband},~\ref{fig:MAX-MIN-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-CyberShake.pdf}
   \captionof{figure}{CyberShake}
   \label{fig:DFS-BFS-CyberShake}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -245,7 +206,6 @@ Experiment 1: Fig.~\ref{fig:MAX-MIN-Broadband},~\ref{fig:MAX-MIN-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-Montage.pdf}
   \captionof{figure}{Montage}
   \label{fig:DFS-BFS-Montage}
-  \vspace{-10pt}
 \end{figure}
 
 
@@ -257,7 +217,6 @@ Experiment 2: Fig.~\ref{fig:DFS-BFS-Broadband},~\ref{fig:DFS-BFS-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-Broadband.pdf}
   \captionof{figure}{Broadband }
   \label{fig:UFFS-FFS-Broadband}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -265,7 +224,6 @@ Experiment 2: Fig.~\ref{fig:DFS-BFS-Broadband},~\ref{fig:DFS-BFS-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-CyberShake.pdf}
   \captionof{figure}{CyberShake}
   \label{fig:UFFS-FFS-CyberShake}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -273,7 +231,6 @@ Experiment 2: Fig.~\ref{fig:DFS-BFS-Broadband},~\ref{fig:DFS-BFS-CyberShake},~\r
  \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-Montage.pdf}
   \captionof{figure}{Montage}
   \label{fig:UFFS-FFS-Montage}
-  \vspace{-10pt}
 \end{figure}
 
 
@@ -284,7 +241,6 @@ Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~
  \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-Broadband.pdf}
   \captionof{figure}{Broadband }
   \label{fig:UIFS-IFS-Broadband}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -292,7 +248,6 @@ Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~
  \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-CyberShake.pdf}
   \captionof{figure}{CyberShake}
   \label{fig:UIFS-IFS-CyberShake}
-  \vspace{-10pt}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -300,7 +255,6 @@ Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~
  \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-Montage.pdf}
   \captionof{figure}{Montage}
   \label{fig:UIFS-IFS-Montage}
-  \vspace{-10pt}
 \end{figure}
 Experiment 4: Fig.~\ref{fig:UIFS-IFS-Broadband},~\ref{fig:UIFS-IFS-CyberShake},~\ref{fig:UIFS-IFS-Montage} show the \emph{Performance Gain} of IFS over UIFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus IFS performs better than UIFS in terms of overhead robustness, which is similar to Experiment 3. The reason is that for these workflows, IF based heuristics can produce similar schedule as the heuristics based on the number of children. Most of the workflows used in this paper is not irregular enough and thus we are not able to show the difference of IF based heuristics and the heuristics based on the number of children. 
 
