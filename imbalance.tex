@@ -55,6 +55,7 @@ We define the \textbf{Impact Factor Variance} ($IFV$) of tasks as the standard d
 %We first define the \textbf{Impact Factor} ($IF$) of a task in a recursive way as below. 
 
 \begin{equation}
+\label{eq:imbalance_impact_factor}
 	IF(t_u)=\sum_{t_v\in Child(t_u)}^{}\frac{IF(t_v)}{||Parent(t_v)||}
 \end{equation}
 where $Child(t_u)$ denotes the set of child tasks of $t_u$, and $||Parent(t_v)||$ the number of parent tasks of $t_v$. Compared to Eq.~\ref{eq:profiling_rr}, the difference is that we set the damping factor to be 0 since we are doing horizontal clustering and thus there is no need to differentiate the level of a task. For simplicity, we assume the $IF$ of a workflow exit task (e.g. $t_5$ in Fig.~\ref{fig:imbalance_dv}) as 1.0. For instance, consider the two workflows presented in Fig.~\ref{fig:imbalance_hifv}. $IF$ for $t_1$, $t_2$, $t_3$, and $t_4$ are computed as follows:
@@ -224,6 +225,8 @@ We extended the WorkflowSim~\cite{Chen2012a} simulator with the balanced cluster
 
 Two workflows are used in the experiments: LIGO~\cite{LIGO} inspiral analysis, and Epigenomics~\cite{Epigenome}. 
 Both workflows are generated and varied using the WorkflowGenerator\footnote[1]{https://confluence.pegasus.isi.edu/display/pegasus/WorkflowGenerator}. LIGO is composed by 400 tasks and its workflow structure is presented in Fig.~\ref{fig:imbalance_shape} (top); Epigenomics has about 500 tasks and is structured as showed in Fig.~\ref{fig:imbalance_shape} (bottom). Runtime (average and task runtime distribution) and overhead (workflow engine delay, queue delay, and network bandwidth) information were collected from real traces production environments~\cite{Chen2011, Juve2013}, then used as input parameters for the simulations.
+We randomly select 20\% from LIGO workflow tasks and increase their task runtime by a factor of \emph{Ratio} to simulate the system variation in a production environment.
+As we have mentioned in Subsection~\ref{sec:methods} , the maximum number of clustered jobs is equal to the number of available resources multiplied by a \emph{clustering factor}. Similar to~\cite{Chen-balanced-2013}, we use $clustering~factor=2$ in the experiments conducted in this work. 
 
 %We first collected runtime information  (i.e., average and distribution of task runtime) and overhead information (including workflow engine delay, queue delay and network bandwidth) from the real traces that were run on real environments before. 
 %Part of runtime distribution and overhead information were shown in \cite{Juve2013} and \cite{Chen} respectively. 
@@ -231,32 +234,24 @@ Both workflows are generated and varied using the WorkflowGenerator\footnote[1]{
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.6\linewidth]{figure/shape_of_inspiral.pdf} \\
-	\includegraphics[width=0.7\linewidth]{figure/shape_of_genome.pdf}
+	\includegraphics[width=0.6\linewidth]{figures/imbalance/shape_of_inspiral.pdf} \\
+	\includegraphics[width=0.7\linewidth]{figures/imbalance/shape_of_genome.pdf}
 	\caption{A simplified visualization of the LIGO Inspiral workflow (top) and Epigenomics workflow (bottom).}
 	\label{fig:imbalance_shape}
 \end{figure}
 
-Three sets of experiments are conducted. Experiment 1 aims at determining an appropriate \emph{clustering factor} such that both the workflow runtime performance and the reliability over the dynamic system variation are improved. We randomly select 20\% from LIGO workflow tasks and increase their task runtime by a factor of \emph{Ratio} to simulate the system variation in a production environment.
+Two sets of experiments are conducted. 
 
-Experiment 2 evaluates the reliability and the influence of average data size in our balancing methods, since data has becoming more and more intensive in scientific workflows~\cite{Juve2013}. In this experiment set, there is no runtime variance ($HRV = 0$). The original average data size (both input and output data) of the LIGO workflow is about 5MB, and of the Epigenomics workflows is about 45MB. We increase the average data size up to 5GB.
+Experiment 1 evaluates the reliability and the influence of average data size in our balancing methods, since data has becoming more and more intensive in scientific workflows~\cite{Juve2013}. In this experiment set, there is no runtime variance ($HRV = 0$). The original average data size (both input and output data) of the LIGO workflow is about 5MB, and of the Epigenomics workflows is about 45MB. We increase the average data size up to 5GB.
 
-Experiment 3 evaluates the influence of the runtime variation (\emph{HRV}) in our balancing methods. We assume a normal distribution to vary task runtimes based on average and standard deviation. In this experiment set, there is no variation on the data size.
+Experiment 2 evaluates the influence of the runtime variation (\emph{HRV}) in our balancing methods. We assume a normal distribution to vary task runtimes based on average and standard deviation. In this experiment set, there is no variation on the data size.
 
 Simulation results present a confidence level of 95\%. We define the performance gain over HC ($\mu$) as the performance of the balancing methods related to the performance of Horizontal Clustering (HC). Thus, for values of $\mu > 0$ our balancing methods perform better than the HC method. Otherwise, the balancing methods perform poorer.
 
 \subsection{Results and Discussion}
-As we have mentioned in Subsection~\ref{sec:methods} , the maximum number of clustered jobs is equal to the number of available resources multiplied by a \emph{clustering factor}. Experiment 1: Fig.~\ref{fig:shc} shows the speedup of Horizontal Clustering (HC) for different \emph{Ratio} and \emph{clustering factors}.  We use the speedup of HC in overall runtime compared to the original overall runtime without clustering. The speedup decreases with the increase of the \emph{clustering factor}. However, a smaller \emph{clustering factor} performs worse when the \emph{Ratio} is high. For simplicity, we use $clustering~factor=2$ in the experiments conducted in this work. 
 
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=0.8\linewidth]{figure/cfactor.pdf}
-	\caption{Experiment 1: Speedup of Horizontal Clustering (HC).}
-	\label{fig:shc}
-	\vspace{-10pt}
-\end{figure}
 
-Experiment 2: Fig.~\ref{fig:performance} (top) shows the performance gain over HC $\mu$ of the balancing methods compared to the HC method for the LIGO workflow. HIFB and HDB significantly increase the performance of the workflow execution. Both strategies capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution, which in this case is none. Fig.~\ref{fig:performance} (bottom) shows the performance of the balancing methods for the Epigenomics workflow. When increasing the average data size, only HDB demonstrates significantly improvement related to HC. Investigating the structure of the Epigenomics workflow (Fig.~\ref{fig:shape}-bottom), we can see that all tasks at the same horizontal level share the same IFs ($HIFV$ = 0), because each branch (surrounded by dash lines) happen to have the same amount of pipelines. Thus, HIFB has no performance improvement when compared to HC. However, for LIGO (Fig.~\ref{fig:shape}-top), $HIFV \neq 0$, thus HIFB improves the workflow runtime performance.  
+Experiment 1: Fig.~\ref{fig:imbalance_performance} (top) shows the performance gain over HC $\mu$ of the balancing methods compared to the HC method for the LIGO workflow. HIFB and HDB significantly increase the performance of the workflow execution. Both strategies capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution, which in this case is none. Fig.~\ref{fig:imbalance_performance} (bottom) shows the performance of the balancing methods for the Epigenomics workflow. When increasing the average data size, only HDB demonstrates significantly improvement related to HC. Investigating the structure of the Epigenomics workflow (Fig.~\ref{fig:imbalance_shape}-bottom), we can see that all tasks at the same horizontal level share the same IFs ($HIFV$ = 0), because each branch (surrounded by dash lines) happen to have the same amount of pipelines. Thus, HIFB has no performance improvement when compared to HC. However, for LIGO (Fig.~\ref{fig:imbalance_shape}-top), $HIFV \neq 0$, thus HIFB improves the workflow runtime performance.  
 %The intuition behind this difference between HDB and HIFB is that 
 HDB captures the strong connections between tasks (data dependencies) and HIFB captures the weak connections (similarity in terms of structure). In both workflows, $HDV$ is not zero thus HDB performs better than HC. 
 
@@ -264,20 +259,20 @@ HDB captures the strong connections between tasks (data dependencies) and HIFB c
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\linewidth]{figure/exp2_ligo.pdf}
-	\includegraphics[width=\linewidth]{figure/exp2_genome.pdf}
-	\caption{Experiment 2: Performance of the LIGO workflow (top) and the Epigenomics workflow (bottom).}
-	\label{fig:performance}
+	\includegraphics[width=\linewidth]{figures/imbalance/exp2_ligo.pdf}
+	\includegraphics[width=\linewidth]{figures/imbalance/exp2_genome.pdf}
+	\caption{Experiment 1: Performance of the LIGO workflow (top) and the Epigenomics workflow (bottom).}
+	\label{fig:imbalance_performance}
 	\vspace{-10pt}
 \end{figure}
 
-Experiment 3: Fig.~\ref{fig:incluence_of_hrv} shows the performance gain $\mu$ when varying task runtimes for the LIGO workflow. As expected, when $HRV$ increases HRB over performs HC. However, HDB and HIFB demonstrate poor performance because they merge tasks based on data dependencies first, and then, they balance the runtime distribution. 
+Experiment 2: Fig.~\ref{fig:incluence_of_hrv} shows the performance gain $\mu$ when varying task runtimes for the LIGO workflow. As expected, when $HRV$ increases HRB over performs HC. However, HDB and HIFB demonstrate poor performance because they merge tasks based on data dependencies first, and then, they balance the runtime distribution. 
 For high values of $HRV$, we just simply need to use HRB. Otherwise, we can use either HDB or HIFB while in some cases HIFB fails to capture the structural information. 
 
 \begin{figure}[htb]
 \centering
 	\includegraphics[width=\linewidth]{figure/exp3.pdf}
-	\caption{Experiment 3: Influence of $HRV$ (LIGO workflow).}
+	\caption{Experiment 2: Influence of $HRV$ (LIGO workflow).}
 	\label{fig:incluence_of_hrv}
 	\vspace{-10pt}
 \end{figure}

@@ -93,24 +93,121 @@ We examined the overhead distributions of a widely used astronomy workflow calle
 
 In this section, we aim to investigate the relationship between the overhead metrics that we proposed and the overall performance of popular workflow restructuring techniques. Among them, task clustering \cite{Singh2008} is a technique that increases the computational granularity of tasks by merging small tasks together into a clustered job, reducing the impact of the queue wait time and also the makespan of the workflow. Data or job throttling \cite{Humphrey2008} limits the amount of parallel data transfer to avoid overloading supporting services such as data servers. Throttling is especially useful for unbalanced workflows in which one task might be idle while waiting for data to arrive. The aim of throttling is to appropriately regulate the rate of data transfers between the workflow tasks via data transfer servers by ways of restricting the data connections, data threads or data transfer jobs. Provisioning tools often deploy pilot jobs as placeholders for the execution of application jobs. Since a placeholder can allow multiple application jobs to execute during its lifetime, some job scheduling overheads can be reduced. 
 
-\textbf{How Task Clustering Reduces Overheads}
+\subsubsection{How Task Clustering Reduces Overheads}
 
-In the following sections, we use a Montage workflow to show how different optimization methods improve overall performance. Many workflows are composed of thousands of fine computational granularity tasks. Task clustering is a technique that increases the computational granularity of tasks by merging small jobs together into a clustered job, reducing the impact of the queue wait time and minimizing the makespan of the workflow. Table 4.2 compares the overheads and runtime of the Montage workflow. We can conclude that with clustering, although the average overheads do not change much, the cumulative overheads decrease greatly due to the decreased number of jobs. With clustering, the makespan has been reduced by 53.3\% by reducing the number of all jobs from 3461 to 104 in this example. Fig. 4.5 shows the percentage of workflow overheads and runtime. The percentage is calculated by the cumulative overhead ($PJ$, or $EP$) divided by the makespan of workflows. With clustering, the portion of runtime is increased significantly. Fig. 4.6 profiles the number of active jobs during execution and it also shows that with clustering the resource utilization is improved significantly. 
+\begin{table}[htb]
+	\footnotesize
+	\centering
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $1.5\times 10^5$ & $1.9\times 10^7$ &  $1.5\times 10^6$ \\
+		SUM/n & 54(0.16\%) & $6.8\times 10^3$(20\%)& 515(1.6\%) \\
+		PJ & $3.2\times 10^3$(9.3\%) & $2.9\times 10^4$(85\%) & $3.3\times 10^4$(102\%) \\
+		EP & 70(0.2\%) & 665(1.9\%) & $4.5\times 10^3$(14\%) \\
+		IF & 310(0.9\%)& $1.6\times 10^4$(45\%) & $3.1\times 10^3$(9.4\%)\\
+	\end{tabular}
+		\caption{Metrics Without Task Clustering}
+		\label{tab:profiling_no_clustering}
+	\quad
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & 681(74\%) & $1.0\times 10^3$(112\%) &  $4.4\times 10^3$(475\%) \\
+		SUM/n & 6.6(0.72\%) & 10(1.1\%)& 43(4.6\%) \\
+		PJ & 116(13\%) & 197(21\%) & 660(72\%) \\
+		EP & 72(7.8\%) & 90(9.8\%) & 420(46\%) \\
+		IF & 117(13\%)& 165(18\%) & 442(48\%)\\
+	\end{tabular}
+		\caption{Metrics with Task Clustering}
+	\label{tab:profiling_clustering}
+\end{table}
 
-\textbf{How Job Throttling Reduces Overheads}
+In the following sections, we use a Montage workflow to show how different optimization methods improve overall performance. Many workflows are composed of thousands of fine computational granularity tasks. Task clustering is a technique that increases the computational granularity of tasks by merging small jobs together into a clustered job, reducing the impact of the queue wait time and minimizing the makespan of the workflow. Table.~\ref{tab:profiling_clustering} and Table.~\ref{tab:profiling_no_clustering} compare the overheads and runtime of the Montage workflow. $SUM/n$ indicates the average overhead or runtime per job.The percentage is calculated by the cumulative overhead ($PJ$, $EP$ or $IF$) divided by the makespan of workflows. 
+In this example, we can see that $PJ$, $EJ$ and $IF$ consistently show that the portion of runtime is increased compared to overheads with task clustering. For example, the $IF$ of queue delay without clustering (45\%) is much larger than the $IF$ of runtime (9.4\%). In the case of task clustering, the $IF$ of runtime (48\%) is much larger than the $IF$ of queue delay (18\%). We can conclude that task clustering improves the runtime performance by reducing the influence of queue delay (more specifically, overlapping). The metric $SUM$ and $SUM/n$, which are usually used in other work, do not provide useful insight for us. 
 
-Data or job throttling [13] limits the amount of parallel data transfer to avoid overloading supporting services such as data servers. Throttling is especially useful for unbalanced workflows in which one task might be idle while waiting for data to arrive. The aim of throttling is to appropriately regulate the rate of data transfers between the workflow tasks via data transfer servers by ways of restricting the data connections, data threads or data transfer jobs. Especially on cloud platforms, I/O requests need to go through more layers than a physical cluster; and thereby workflows may suffer a higher overhead from data servers.In our experiments, the data transfer service is deployed on a virtual machine that is similar to a worker node.  In this section, we evaluate a simple static throttling strategy where the Condor scheduler limits the number of concurrent jobs to be run and thereby restricts the number of parallel I/O requests. There are 32 resources available and we evaluate the cases with throttling parameters that are equal to 24, 16 and 12 in Table 4.3. In the case of 24, the resources are better utilized but the data server is heavily loaded. In the case of 12, the resources are under-utilized even though the data server has more capabilities. In this experiment, both $PJ$ and $EP$ reflect the variation trend of overheads and makespan better than $Sum$. 
+\subsubsection{How Job Throttling Reduces Overheads}
 
-Fig. 4.7 shows the percentage of workflow overheads and runtime. Fig. 4.8 profiles the number of active jobs during execution. Montage is an unbalanced workflow because the three major types of jobs (mProjectPP, mDiffFit, and mBackground) impose a heavy load on the data server while the other jobs in the workflow do not. Fig. 4.8 shows that with throttling the maximum number of active jobs is restricted. With limited throttling (reducing threshold from 24 to 16), the data transfer requests are distributed in the timeline more evenly and, as a result, their overhead is reduced. However, with over throttling (reducing threshold from 16 to 12), resources are not fully utilized and thus the makespan is increased. 
+\begin{table}[htb]
+	\footnotesize
+	\centering
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $9.2\times 10^4$ & $1.7\times 10^5$ &  $9.2\times 10^3$ \\
+		SUM/n & 32(2.6\%) & 60(4.8\%)& 3.2(0.3\%) \\
+		PJ & 558(44.6\%) & 873(70\%) & 990(79\%) \\
+		EP & 84(6.7\%) & 90(7.2\%) & 190(15.2\%) \\
+		IF & 162(13\%)& 331(27\%) & 205(16.4\%)\\
+	\end{tabular}
+		\caption{Metrics with Throttling ($p$=24)}
+		\label{tab:profiling_throttling_24}
+	\quad
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $7.4\times 10^4$ & $1.6\times 10^5$ &  $6.5\times 10^3$ \\
+		SUM/n & 25.9(2.2\%) & 57(4.9\%)& 2.3(0.2\%) \\
+		PJ & 561(47.5\%) & 856(72.5\%) & 928(78.6\%) \\
+		EP & 77(6.5\%) & 75(6.4\%) & 140(11.9\%) \\
+		IF & 153(13\%)& 307(26\%) & 187(15.8\%)\\
+	\end{tabular}
+		\caption{Metrics with Throttling ($p$=16)}
+		\label{tab:profiling_throttling_16}
+	\quad
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $9.2\times 10^4$ & $1.7\times 10^5$ &  $9.2\times 10^3$ \\
+		SUM/n & 32(2.5\%) & 59(4.7\%)& 3.2(0.3\%) \\
+		PJ & 520(41\%) & 896(71\%) & 1073(85\%) \\
+		EP & 75(5.9\%) & 70(5.5\%) & 185(14.6\%) \\
+		IF & 142(11.2\%)& 326(25.7\%) & 223(17.6\%)\\
+	\end{tabular}
+		\caption{Metrics with Throttling ($p$=12)}
+	\label{tab:profiling_throttling_12}
+\end{table}
 
-\textbf{How Pre-staging Reduces Overheads}
 
-Scientific workflows often consume and produce a large amount of data during execution. Data pre-staging [14] transfers input data before the computational activities are started or even before the workflow is mapped onto resources. Data placement policies distribute data in advance by placing data sets where they may be requested or by replicating data sets to improve runtime performance. In our experiments, because data is already pre-staged, the implementation of the stage-in job is to create a soft link to the data from the workflow’s working directory, making it available to the workflow jobs. Table 4.4 and Fig. 4.9 show the cumulative overheads and runtime of the Montage workflows running with and without pre-staging. Looking at the rows for $PJ$ in Table 4.4, we can conclude that pre-staging improves the overall runtime by reducing the data transfer delay. For the case without pre-staging the $EP$ for data transfer delay is zero because it overlaps with the workflow engine delay of another job. Therefore, in this experiment, $PJ$ reflects the variation trend of the makespan more consistently. 
+Data or job throttling limits the amount of parallel data transfer to avoid overloading supporting services such as data servers. Throttling is especially useful for unbalanced workflows in which one task might be idle while waiting for data to arrive. The aim of throttling is to appropriately regulate the rate of data transfers between the workflow tasks via data transfer servers by ways of restricting the data connections, data threads or data transfer jobs. Especially on cloud platforms, I/O requests need to go through more layers than a physical cluster; and thereby workflows may suffer a higher overhead from data servers.In our experiments, the data transfer service is deployed on a virtual machine that is similar to a worker node.  In this section, we evaluate a simple static throttling strategy where the Condor scheduler limits the number of concurrent jobs to be run and thereby restricts the number of parallel I/O requests. There are 32 resources available and we evaluate the cases with throttling parameters ($p$, the maximum jobs in queue) that are equal to 24, 16 and 12 respectively. In the case of $p$=24, the resources are better utilized but the data server is heavily loaded. In the case of $p$=12, the resources are under-utilized even though the data server has more capabilities. Table.~\ref{tab:profiling_throttling_24, tab:profiling_throttling_16, tab:profiling_throttling_12} show the contribution of workflow overheads and runtime. With limited throttling (reducing threshold from 24 to 16), the data transfer requests are distributed in the timeline more evenly and, as a result, their overhead is reduced. However, with over throttling (reducing threshold from 16 to 12), resources are not fully utilized and thus the makespan is increased. In this experiment, $PJ$, $EP$ and $IF$ reflect the variation trend of overheads and makespan better than $SUM$ and $SUM/n$. 
 
-\textbf{How Provisioning Reduces Overheads}
+%\textbf{How Pre-staging Reduces Overheads}
 
-Many of the scientific applications presented here consist of a large number of short-duration tasks whose runtimes are greatly influenced by overheads present in distributed environments. Most of these environments have an execution mode based on batch scheduling where jobs are held in a queue until resources become available to execute them. Such a best-effort model normally imposes heavy overheads in scheduling and queuing. For example, Condor-G [23] uses Globus GRAM [37] to submit jobs to remote clusters. The Globus Toolkit normally has a significant overhead compared to running Condor directly as an intra domain resource and job management system. Provisioning tools often deploy pilot jobs as placeholders for the execution of application jobs. Since a placeholder can allow multiple application jobs to execute during its lifetime, some job scheduling overheads can be reduced. In our experiments, we compared the performance of Condor-G (without provisioning) and Corral (with provisioning). 
+%Scientific workflows often consume and produce a large amount of data during execution. Data pre-staging [14] transfers input data before the computational activities are started or even before the workflow is mapped onto resources. Data placement policies distribute data in advance by placing data sets where they may be requested or by replicating data sets to improve runtime performance. In our experiments, because data is already pre-staged, the implementation of the stage-in job is to create a soft link to the data from the workflow’s working directory, making it available to the workflow jobs. Table 4.4 and Fig. 4.9 show the cumulative overheads and runtime of the Montage workflows running with and without pre-staging. Looking at the rows for $PJ$ in Table 4.4, we can conclude that pre-staging improves the overall runtime by reducing the data transfer delay. For the case without pre-staging the $EP$ for data transfer delay is zero because it overlaps with the workflow engine delay of another job. Therefore, in this experiment, $PJ$ reflects the variation trend of the makespan more consistently. 
 
-Table 4.5 and Fig. 4.10 show the percentage of workflow overheads and runtime. The percentage is calculated by the cumulative overhead ($Sum$, $PJ$, or $EP$) divided by the makespan of workflows. Comparing $Sum$, $PJ$ and $EP$, we can conclude that the overheads with provisioning have been reduced significantly because the local scheduler has direct control over the resources without going through Globus. 
+\subsubsection{How Provisioning Reduces Overheads}
+
+\begin{table}[htb]
+	\footnotesize
+	\centering
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $1.5\times 10^5$ & $1.9\times 10^7$ &  $1.5\times 10^6$ \\
+		SUM/n & 54(0.16\%) & $6.8\times 10^3$(20\%)& 515(1.6\%) \\
+		PJ & $3.2\times 10^3$(9.3\%) & $2.9\times 10^4$(85\%) & $3.3\times 10^4$(102\%) \\
+		EP & 70(0.2\%) & 665(1.9\%) & $4.5\times 10^3$(14\%) \\
+		IF & 310(0.9\%)& $1.6\times 10^4$(45\%) & $3.1\times 10^3$(9.4\%)\\
+	\end{tabular}
+		\caption{Metrics Without Resource Provisioning}
+			\label{tab:profiling_no_provisioning}
+	\quad
+	\begin{tabular}{l|rrrr}
+Metric & Workflow Engine Delay  &Queue Delay& Runtime\\
+		\hline
+		SUM & $8.1\times 10^4$ & $5.0\times 10^5$ &  $3.1\times 10^4$ \\
+		SUM/n & 28(0.9\%) & 173(5.5\%)& 11(0.4\%) \\
+		PJ & $1.0\times 10^3$(32\%) & $2.3\times 10^3$(74\%) & $3.0\times 10^3$(94\%) \\
+		EP & 73(2.3\%) & 50(1.6\%) & 588(19\%) \\
+		IF & 174(5.5\%)& 840(27\%) & 683(22\%)\\
+	\end{tabular}
+		\caption{Metrics with Resource Provisioning}
+	\label{tab:profiling_provisioning}
+\end{table}
+
+
+Many of the scientific applications presented here consist of a large number of short-duration tasks whose runtimes are greatly influenced by overheads present in distributed environments. Most of these environments have an execution mode based on batch scheduling where jobs are held in a queue until resources become available to execute them. Such a best-effort model normally imposes heavy overheads in scheduling and queuing. For example, Condor-G~\cite{Frey2002} uses Globus GRAM~\cite{Foster1997} to submit jobs to remote clusters. The Globus Toolkit normally has a significant overhead compared to running Condor directly as an intra domain resource and job management system. Provisioning tools often deploy pilot jobs as placeholders for the execution of application jobs. Since a placeholder can allow multiple application jobs to execute during its lifetime, some job scheduling overheads can be reduced. In our experiments, we compared the performance of Condor-G (without provisioning) and Corral (with provisioning). 
+
+Table.~\ref{tab:profiling_no_provisioning} and Table.~\ref{tab:profiling_provisioning} show the contribution of workflow overheads and runtime. The percentage is calculated by the cumulative overhead ($PJ$, $EP$, or $IF$) divided by the makespan of workflows. Comparing $PJ$, $EP$ and $IF$, we can conclude that the overheads with provisioning have been reduced significantly. The reason is that the local scheduler has direct control over the resources without going through Globus. 
 
 

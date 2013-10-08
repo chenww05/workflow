@@ -13,7 +13,7 @@ A significant amount of work~\cite{Chetto1990, Dong2010, Yang03} in the literatu
 
 Another approach is to overestimate the execution time of individual jobs. Delay scheduling~\cite{Zaharia2010} waits for a small amount of time, letting other MapReduce jobs launch tasks instead and this method can achieve a better tradeoff of locality and fairness. However, this method only applies to workload scheduling and particularly MapReduce jobs since the duration of them is short and thus it is not difficult to estimate the scheduling delay. Also, this results in a waste of resources as it induces a lot of idle time during the execution, if the overhead is shorter than the estimation. Second, overheads do not simply work as an attachment to the job runtime and it involves a lot more complicated patterns such as periodicity~\cite{Chen2011}. 
 
-In this section, we first present our work on evaluating the overhead robustness of scheduling heuristics and we indicate a list of heuristics that are overhead robust even without an estimate of the overhead duration. Second, since the estimate of overhead duration is difficult, we develop new heuristics that leverage the pattern information of workflow overheads, which represents a new approach to design overhead robust algorithms. To the best of our knowledge, so far, no study has systematically tried to evaluate the scheduling heuristics with respect to the overhead robustness.  
+In this section, we first present our work on evaluating the overhead robustness of scheduling heuristics and we indicate a list of structural heuristics that are overhead robust. Second, since the estimate of overhead duration is difficult, we develop new heuristics that leverage the pattern information of workflow overheads, which represents a new approach to design overhead robust algorithms. To the best of our knowledge, so far, no study has systematically tried to evaluate the scheduling heuristics with respect to the overhead robustness.  
 
 
 
@@ -62,7 +62,8 @@ These overhead patterns reappear frequently during a duration series and they re
 %It is not workflow engine delay it is workflow engine interval
 \subsection{Overhead Robust Heuristics}
 \label{sec:heuristics}
-In this section, we introduce the overhead robustness of four pairs of scheduling heuristics. Heuristics are widely used in workflow scheduling since the scheduling problem is a NP-hard problem and the time complicity of a global optimization of the overall runtime is not affordable. Usually, heuristics utilize unique features of workflows or resources to guide the mapping of jobs to resources. For example, both of the MINMIN~\cite{Blythe2005} algorithm and the MAXMIN~\cite{Braun2001} algorithm utilize the runtime of a job as the feature. However, they conduct the mapping in an opposite way, that is, MINMIN chooses the job with the shortest runtime while MAXMIN chooses the job with the longest runtime. Intuitively speaking, there must be either of them (we call it overhead robust) that performs better than the other one (we call it overhead unrobust) since they operates oppositely. Inspired by these coupling heuristics, we use a relative overhead robustness approach to evaluate these scheduling heuristics. For a pair of heuristics that use the same feature, we define the relative overhead robustness as the performance gain of the overhead robust heuristic against the other one. The more performance gain we have, the more significant this feature has on the overhead robustness. Also, it is not fair to compare scheduling heuristics that use different features because they may have vastly different performance even without overheads. Furthermore, in practice, we can use scheduling heuristics with different features at the same time but not those with the same features. 
+In this section, we introduce the overhead robustness of four pairs of scheduling heuristics. Heuristics are widely used in workflow scheduling since the scheduling problem is a NP-hard problem and the time complicity of a global optimization of the overall runtime is not affordable. Usually, heuristics utilize unique features of workflows or resources to guide the mapping of jobs to resources. For example, both of the MINMIN~\cite{Blythe2005} algorithm and the MAXMIN~\cite{Braun2001} algorithm utilize the runtime of a job as the feature. However, they conduct the mapping in an opposite way, that is, MINMIN chooses the job with the shortest runtime while MAXMIN chooses the job with the longest runtime. 
+%Intuitively speaking, there must be either of them (we call it overhead robust) that performs better than the other one (we call it overhead unrobust) since they operates oppositely. Inspired by these coupling heuristics, we use a relative overhead robustness approach to evaluate these scheduling heuristics. For a pair of heuristics that use the same feature, we define the relative overhead robustness as the performance gain of the overhead robust heuristic against the other one. The more performance gain we have, the more significant this feature has on the overhead robustness. Also, it is not fair to compare scheduling heuristics that use different features because they may have vastly different performance even without overheads. Furthermore, in practice, we can use scheduling heuristics with different features at the same time but not those with the same features. 
 Below we introduce the four pairs of scheduling heuristics including one that we propose. 
 
 
@@ -78,7 +79,7 @@ Intuitively speaking, we believe MAXMIN has better overhead robustness than MINM
 \end{figure}
 \emph{Breadth First} and \emph{Depth First}: Namely, the Breadth First (BFS) algorithm iterates the jobs at the same workflow level (or depth within a workflow directed acyclic graph) first while the Depth First (DFS) algorithm iterates the jobs at the deepest workflow level first. Intuitively speaking, we believe BFS performs better than DFS in terms of overhead robustness since BFS releases more jobs at the same workflow level for most scientific workflows as shown in Fig.~\ref{fig:sensitivity_shape}. Therefore, with enough jobs in queue, BFS can fully utilize the resources without wasting this overhead interval.  
 
-\emph{Fertile First} and \emph{Unfertile First}: The Fertile First (FFS) algorithm sorts all the unmapped jobs based on the number of children jobs that they have and assigns the jobs with most children jobs first. The Unfertile First (UFFS) algorithm works in the opposite way and assigns the jobs with lest children jobs first. Similar to the case of BFS and DFS, we believe FFS should perform better than UFFS since FFS releases more jobs at the next level compared to UFFS and thus FFS can fully utilize the available resources. 
+\emph{Max Children First} and \emph{Min Children First}: The Max Children First (MAXCH) algorithm sorts all the unmapped jobs based on the number of children jobs that they have and assigns the jobs with most children jobs first. The Min Children First (MINCH) algorithm works in the opposite way and assigns the jobs with lest children jobs first. Similar to the case of BFS and DFS, we believe MAXCH should perform better than MINCH since MAXCH releases more jobs at the next level compared to MINCH and thus MAXCH can fully utilize the available resources. 
 
 \begin{figure}[htb]
 \centering
@@ -88,12 +89,8 @@ Intuitively speaking, we believe MAXMIN has better overhead robustness than MINM
 \end{figure}
 
 \emph{Important First} and \emph{Unimportant First}: Here we propose a pair of Impact Factor based scheduling heuristics. The Important First (IFS) algorithm sorts all the unmapped jobs based on their \emph{Impact Factor} (IF) and assigns the jobs with the largest IF first while the Unimportant First (UIFS) algorithm assigns the jobs with the smallest IF first. 
-The \textbf{Impact Factor} ($IF$) of a job $j_u$ is defined as follows:
-
-\begin{equation}
-	IF(j_u)=\sum_{j_v\in Child(j_u)}^{}\frac{IF(j_v)}{L(j_v)}
-\end{equation}
-where $Child(j_u)$ denotes the set of child jobs of $j_u$, and $L(j_v)$ the number of parent jobs of $j_v$. For simplicity, we assume the $IF$ of a workflow exit job (e.g. $j_7$ in Fig.~\ref{fig:sensitivity_impact}) as 1.0. For instance, consider the workflow in Fig.~\ref{fig:sensitivity_impact}. $IF$ for $j_1$, $j_2$, $j_3$, and $j_4$ are computed as follows:
+The \textbf{Impact Factor} ($IF$) of a job $j_u$ is defined the same as Eq.~\ref{eq:imbalance_impact_factor}. 
+For simplicity, we assume the $IF$ of a workflow exit job (e.g. $j_7$ in Fig.~\ref{fig:sensitivity_impact}) as 1.0. For instance, consider the workflow in Fig.~\ref{fig:sensitivity_impact}. $IF$ for $j_1$, $j_2$, $j_3$, and $j_4$ are computed as follows:
 
 \begin{eqnarray}
 	\displaystyle  
@@ -103,7 +100,7 @@ where $Child(j_u)$ denotes the set of child jobs of $j_u$, and $L(j_v)$ the numb
 	&IF(j_3 )=IF(j_4 )=IF(j_6 )/3=0.17\nonumber 
 \end{eqnarray}
 Thus, IFS algorithm should schedule $j_2$ first while UIFS algorithm should schedule $j_3$ or $j_4$ first. The intuition of Impact Factor is that we aim to measure the relative importance of a job to the entire graph. Intuitively speaking, tasks with larger impact factors should have more impacts on the remaining jobs compared to tasks with smaller impact factors. For example, a bottleneck usually has a larger IF since it controls the release of more jobs. 
-Similar to the case of FFS and UFFS, we believe IFS has a better overhead robustness than UIFS since IFS releases more jobs at the next few levels compared to UFFS. 
+Similar to the case of MAXCH and MINCH, we believe IFS has a better overhead robustness than UIFS since IFS releases more jobs at the next few levels compared to UIFS. 
 
 
 %The idea of these overhead aware heuristics is we would like to improve the overhead robustness even when we are not able to precisely predict the duration of overheads. Instead, workflow overheads have common patterns, which can determine the relative performance of different heuristics. 
@@ -116,7 +113,7 @@ Table~\ref{tab:sensitivity_heuristics} summaries the heuristics and their potent
 Heuristics & Overhead Robust & Overhead Unrobust \\ \hline
     Experiment 1 & MAXMIN & MINMIN \\ \hline
    Experiment 2 & BFS & DFS \\ \hline
- Experiment 3 & FFS & UFFS \\ \hline
+ Experiment 3 & MAXCH & MINCH \\ \hline
 Experiment 4 & IFS & UIFS\\
     \hline
   \end{tabular}
@@ -132,12 +129,12 @@ The experiments presented hereafter evaluate the performance of the four pairs o
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=1.0\linewidth]{figure/shape.pdf} 
+	\includegraphics[width=1.0\linewidth]{figures/sensitivity/shape.pdf} 
 	\caption{A simplified visualization of the Broadband workflow, the Montage workflow and the CyberShake workflow.}
-	\label{fig:shape}
+	\label{fig:sensitivity_shape}
 \end{figure}
 
-We extended the WorkflowSim~\cite{WorkflowSim} simulator with the overhead model to simulate a distributed environment where we could evaluate the overhead robustness of scheduling algorithms when varying the average overheads and throughput. As an initial attempt, we focus on the workflow engine delay ($d$) in this paper. The simulated computing platform is composed by 20 single core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Each machine has 512MB of memory and the capacity to process 1,000 million instructions per second. 
+We extended the WorkflowSim~\cite{Chen2012a} simulator with the overhead model to simulate a distributed environment where we could evaluate the overhead robustness of scheduling algorithms when varying the average overheads and throughput. As an initial attempt, we focus on the workflow engine delay ($d$) in this paper. The simulated computing platform is composed by 20 single core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Each machine has 512MB of memory and the capacity to process 1,000 million instructions per second. 
 %Task scheduling is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
 %WorkflowSim is a feature-rich toolkit to simulate workflow planning and execution. It provides runtime randomization and multiple task clustering methods that we need. 
 
@@ -145,7 +142,7 @@ We extended the WorkflowSim~\cite{WorkflowSim} simulator with the overhead model
 
 Three workflows are used in the experiments: 
 Broadband~\cite{Broadband} is an application that enables researchers to combine long-period deterministic seismograms with high-frequency stochastic seismograms. 
-Montage~\cite{Sakellariou2010} is an astronomy application used to construct large image mosaics of the sky. CyberShake~\cite{Callaghan2008} is a seismology application that calculates Probabilistic Seismic Hazard curves for geographic sites in the Southern California region. All workflows are generated and varied using the WorkflowGenerator\footnote[1]{https://confluence.pegasus.isi.edu/display/pegasus/WorkflowGenerator}. Each workflow instance is composed by around 100 tasks and its workflow structure is presented in Fig.~\ref{fig:shape}. Runtime (average and task runtime distribution) and overhead (workflow engine delay and queue delay) information were collected from real traces production environments~\cite{Chen2011, Juve2013}, then used as input parameters for the simulations.
+Montage~\cite{Sakellariou2010} is an astronomy application used to construct large image mosaics of the sky. CyberShake~\cite{Callaghan2008} is a seismology application that calculates Probabilistic Seismic Hazard curves for geographic sites in the Southern California region. All workflows are generated and varied using the WorkflowGenerator\footnote[1]{https://confluence.pegasus.isi.edu/display/pegasus/WorkflowGenerator}. Each workflow instance is composed by around 100 tasks and its workflow structure is presented in Fig.~\ref{fig:sensitivity_shape}. Runtime (average and task runtime distribution) and overhead (workflow engine delay and queue delay) information were collected from real traces production environments~\cite{Chen2011, Juve2013}, then used as input parameters for the simulations.
 
 %We first collected runtime information  (i.e., average and distribution of task runtime) and overhead information (including workflow engine delay, queue delay and network bandwidth) from the real traces that were run on real environments before. 
 %Part of runtime distribution and overhead information were shown in \cite{Juve2013} and \cite{Chen} respectively. 
@@ -159,7 +156,7 @@ Four sets of experiments are conducted. Experiment 1 evaluates the relative robu
 
 
 
-In these experiment sets, we vary the average throughput of workflow engine from 1 to 20 and we show the results of $t=1, 5, 15, 20$. The original throughput of workflow engine in these traces is 5 and a throughput that is larger than 20 does not influence the performance much since we have only 20 worker nodes in our experiments. We also vary the average interval of workflow engine from 0 to 100 seconds, which represents a typical range of workflow engine delay as shown in~\cite{Chen2011} and this range is able to show the difference of overhead robustness in these heuristics. 
+In these experiment sets, we vary the average throughput of workflow engine from 1 to 20 and we show the results of $t$=1, 5, 15, 20. The original throughput of workflow engine in these traces is 5 and a throughput that is larger than 20 does not influence the performance much since we have only 20 worker nodes in our experiments. We also vary the average interval of workflow engine from 0 to 100 seconds, which represents a typical range of workflow engine delay as shown in~\cite{Chen2011} and this range is able to show the difference of overhead robustness in these heuristics. 
 
 \subsection{Results and Discussion}
 
@@ -235,7 +232,7 @@ Experiment 2: Fig.~\ref{fig:DFS-BFS-Broadband},~\ref{fig:DFS-BFS-CyberShake},~\r
 
 
 
-Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~\ref{fig:UFFS-FFS-Montage} show the \emph{Performance Gain} of FFS over UFFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus FFS performs better than UFFS in terms of overhead robustness, which is similar to Experiment 2. Comparing Fig.~\ref{fig:DFS-BFS-Broadband} and Fig.~\ref{fig:UFFS-FFS-Broadband} we can see the \emph{Performance Gain} of FFS over UFFS is more significant (30\%) than that of BFS over DFS (20\%).  
+Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~\ref{fig:UFFS-FFS-Montage} show the \emph{Performance Gain} of MAXCH over MINCH for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus MAXCH performs better than MINCH in terms of overhead robustness, which is similar to Experiment 2. Comparing Fig.~\ref{fig:DFS-BFS-Broadband} and Fig.~\ref{fig:UFFS-FFS-Broadband} we can see the \emph{Performance Gain} of MAXCH over MINCH is more significant (30\%) than that of BFS over DFS (20\%).  
 \begin{figure}[!htb]
 \centering
  \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-Broadband.pdf}
