@@ -1,5 +1,5 @@
 
-\section{Sensitivity Metrics}
+\section{Robustness Metrics}
 \label{sec:sensitivity}
 
 
@@ -63,7 +63,9 @@ These overhead patterns reappear frequently during a duration series and they re
 \subsection{Overhead Robust Heuristics}
 \label{sec:heuristics}
 In this section, we introduce the overhead robustness of four pairs of scheduling heuristics. Heuristics are widely used in workflow scheduling since the scheduling problem is a NP-hard problem and the time complicity of a global optimization of the overall runtime is not affordable. Usually, heuristics utilize unique features of workflows or resources to guide the mapping of jobs to resources. For example, both of the MINMIN~\cite{Blythe2005} algorithm and the MAXMIN~\cite{Braun2001} algorithm utilize the runtime of a job as the feature. However, they conduct the mapping in an opposite way, that is, MINMIN chooses the job with the shortest runtime while MAXMIN chooses the job with the longest runtime. 
-%Intuitively speaking, there must be either of them (we call it overhead robust) that performs better than the other one (we call it overhead unrobust) since they operates oppositely. Inspired by these coupling heuristics, we use a relative overhead robustness approach to evaluate these scheduling heuristics. For a pair of heuristics that use the same feature, we define the relative overhead robustness as the performance gain of the overhead robust heuristic against the other one. The more performance gain we have, the more significant this feature has on the overhead robustness. Also, it is not fair to compare scheduling heuristics that use different features because they may have vastly different performance even without overheads. Furthermore, in practice, we can use scheduling heuristics with different features at the same time but not those with the same features. 
+%Intuitively speaking, there must be either of them (we call it overhead robust) that performs better than the other one (we call it overhead unrobust) since they operates oppositely. 
+Inspired by these coupling heuristics, we use a relative performance gain to evaluate these scheduling heuristics. For a pair of heuristics that use the same feature, we define the relative performance gain as the performance improvement of the overhead robust heuristic against the other one. The more performance gain we have, the more significant this feature has on the overhead robustness. 
+%Also, it is not fair to compare scheduling heuristics that use different features because they may have vastly different performance even without overheads. Furthermore, in practice, we can use scheduling heuristics with different features at the same time but not those with the same features. 
 Below we introduce the four pairs of scheduling heuristics including one that we propose. 
 
 
@@ -83,7 +85,7 @@ Intuitively speaking, we believe MAXMIN has better overhead robustness than MINM
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=0.6\linewidth]{figures/sensitivity/impact_factor.pdf}
+ \includegraphics[width=0.5\linewidth]{figures/sensitivity/impact_factor.pdf}
   \captionof{figure}{Impact Factor}
   \label{fig:sensitivity_impact}
 \end{figure}
@@ -162,96 +164,96 @@ In these experiment sets, we vary the average throughput of workflow engine from
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-Broadband.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MAX-MIN-Broadband.pdf}
   \captionof{figure}{Broadband }
-  \label{fig:MAX-MIN-Broadband}
+  \label{fig:sensitivity_MAX-MIN-Broadband}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-CyberShake.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MAX-MIN-CyberShake.pdf}
   \captionof{figure}{CyberShake}
-  \label{fig:MAX-MIN-CyberShake}
+  \label{fig:sensitivity_MAX-MIN-CyberShake}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/MAX-MIN-Montage.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MAX-MIN-Montage.pdf}
   \captionof{figure}{Montage}
-  \label{fig:MAX-MIN-Montage}
+  \label{fig:sensitivity_MAX-MIN-Montage}
 \end{figure}
 
 
-Experiment 1: Fig.~\ref{fig:MAX-MIN-Broadband},~\ref{fig:MAX-MIN-CyberShake},~\ref{fig:MAX-MIN-Montage} show the  \emph{Performance Gain} of MAXMIN over MINMIN for the three workflows. We expected to see most  \emph{Performance Gain} $>0$ if MAXMIN is a overhead robust heuristic compared to MINMIN. However, except for the Montage workflow, the \emph{Performance Gain} is not significant for all of parameter settings, which concludes that MAXMIN is not globally overwhelming MINMIN in terms of overhead robustness. The reason we believe is that the  \emph{Performance Gain} in this comparison highly depends on the ratio of job runtime, workflow engine delay, number of resources and throughput of workflow engine. 
+Experiment 1: Fig.~\ref{fig:sensitivity_MAX-MIN-Broadband},~\ref{fig:sensitivity_MAX-MIN-CyberShake},~\ref{fig:sensitivity_MAX-MIN-Montage} show the  \emph{Performance Gain} of MAXMIN over MINMIN for the three workflows. We expected to see most  \emph{Performance Gain} $>0$ if MAXMIN is a overhead robust heuristic compared to MINMIN. However, except for the Montage workflow, the \emph{Performance Gain} is not significant for all of parameter settings, which concludes that MAXMIN is not globally overwhelming MINMIN in terms of overhead robustness. The reason we believe is that the  \emph{Performance Gain} in this comparison highly depends on the ratio of job runtime, workflow engine delay, number of resources and throughput of workflow engine. 
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-Broadband.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/DFS-BFS-Broadband.pdf}
   \captionof{figure}{Broadband }
-  \label{fig:DFS-BFS-Broadband}
+  \label{fig:sensitivity_DFS-BFS-Broadband}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-CyberShake.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/DFS-BFS-CyberShake.pdf}
   \captionof{figure}{CyberShake}
-  \label{fig:DFS-BFS-CyberShake}
+  \label{fig:sensitivity_DFS-BFS-CyberShake}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/DFS-BFS-Montage.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/DFS-BFS-Montage.pdf}
   \captionof{figure}{Montage}
-  \label{fig:DFS-BFS-Montage}
+  \label{fig:sensitivity_DFS-BFS-Montage}
 \end{figure}
 
 
-Experiment 2: Fig.~\ref{fig:DFS-BFS-Broadband},~\ref{fig:DFS-BFS-CyberShake},~\ref{fig:DFS-BFS-Montage} show the \emph{Performance Gain} of BFS over DFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus BFS performs better than DFS in terms of overhead robustness. What is more, Fig~\ref{fig:DFS-BFS-CyberShake} shows with the increase of average throughput, the \emph{Performance Gain} is more significant. We can also see that when the average throughput is high, the \emph{Performance Gain} increases with the average interval of workflow engine. This suggests us in a real environment with a large overhead, we should use BFS instead of DFS. 
+Experiment 2: Fig.~\ref{fig:sensitivity_DFS-BFS-Broadband},~\ref{fig:sensitivity_DFS-BFS-CyberShake},~\ref{fig:sensitivity_DFS-BFS-Montage} show the \emph{Performance Gain} of BFS over DFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus BFS performs better than DFS in terms of overhead robustness. What is more, Fig~\ref{fig:sensitivity_DFS-BFS-CyberShake} shows with the increase of average throughput, the \emph{Performance Gain} is more significant. We can also see that when the average throughput is high, the \emph{Performance Gain} increases with the average interval of workflow engine. This suggests us in a real environment with a large overhead, we should use BFS instead of DFS. 
 
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-Broadband.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MINCH-MAXCH-Broadband.pdf}
   \captionof{figure}{Broadband }
-  \label{fig:UFFS-FFS-Broadband}
+  \label{fig:sensitivity_MINCH-MAXCH-Broadband}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-CyberShake.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MINCH-MAXCH-CyberShake.pdf}
   \captionof{figure}{CyberShake}
-  \label{fig:UFFS-FFS-CyberShake}
+  \label{fig:sensitivity_MINCH-MAXCH-CyberShake}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UFFS-FFS-Montage.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/MINCH-MAXCH-Montage.pdf}
   \captionof{figure}{Montage}
-  \label{fig:UFFS-FFS-Montage}
+  \label{fig:sensitivity_MINCH-MAXCH-Montage}
 \end{figure}
 
 
 
-Experiment 3: Fig.~\ref{fig:UFFS-FFS-Broadband},~\ref{fig:UFFS-FFS-CyberShake},~\ref{fig:UFFS-FFS-Montage} show the \emph{Performance Gain} of MAXCH over MINCH for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus MAXCH performs better than MINCH in terms of overhead robustness, which is similar to Experiment 2. Comparing Fig.~\ref{fig:DFS-BFS-Broadband} and Fig.~\ref{fig:UFFS-FFS-Broadband} we can see the \emph{Performance Gain} of MAXCH over MINCH is more significant (30\%) than that of BFS over DFS (20\%).  
+Experiment 3: Fig.~\ref{fig:sensitivity_MINCH-MAXCH-Broadband},~\ref{fig:sensitivity_MINCH-MAXCH-CyberShake},~\ref{fig:sensitivity_MINCH-MAXCH-Montage} show the \emph{Performance Gain} of MAXCH over MINCH for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus MAXCH performs better than MINCH in terms of overhead robustness, which is similar to Experiment 2. Comparing Fig.~\ref{fig:sensitivity_DFS-BFS-Broadband} and Fig.~\ref{fig:sensitivity_MINCH-MAXCH-Broadband} we can see the \emph{Performance Gain} of MAXCH over MINCH is more significant (30\%) than that of BFS over DFS (20\%).  
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-Broadband.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/UIFS-IFS-Broadband.pdf}
   \captionof{figure}{Broadband }
-  \label{fig:UIFS-IFS-Broadband}
+  \label{fig:sensitivity_UIFS-IFS-Broadband}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-CyberShake.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/UIFS-IFS-CyberShake.pdf}
   \captionof{figure}{CyberShake}
-  \label{fig:UIFS-IFS-CyberShake}
+  \label{fig:sensitivity_UIFS-IFS-CyberShake}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
- \includegraphics[width=0.9\linewidth]{figure/UIFS-IFS-Montage.pdf}
+ \includegraphics[width=0.9\linewidth]{figures/sensitivity/UIFS-IFS-Montage.pdf}
   \captionof{figure}{Montage}
-  \label{fig:UIFS-IFS-Montage}
+  \label{fig:sensitivity_UIFS-IFS-Montage}
 \end{figure}
-Experiment 4: Fig.~\ref{fig:UIFS-IFS-Broadband},~\ref{fig:UIFS-IFS-CyberShake},~\ref{fig:UIFS-IFS-Montage} show the \emph{Performance Gain} of IFS over UIFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus IFS performs better than UIFS in terms of overhead robustness, which is similar to Experiment 3. The reason is that for these workflows, IF based heuristics can produce similar schedule as the heuristics based on the number of children. Most of the workflows used in this paper is not irregular enough and thus we are not able to show the difference of IF based heuristics and the heuristics based on the number of children. 
+Experiment 4: Fig.~\ref{fig:sensitivity_UIFS-IFS-Broadband},~\ref{fig:sensitivity_UIFS-IFS-CyberShake},~\ref{fig:sensitivity_UIFS-IFS-Montage} show the \emph{Performance Gain} of IFS over UIFS for the three workflows. We observe that most  \emph{Performance Gain} $>0$ and thus IFS performs better than UIFS in terms of overhead robustness, which is similar to Experiment 3. The reason is that for these workflows, IF based heuristics can produce similar schedule as the heuristics based on the number of children. Most of the workflows used in this paper is not irregular enough and thus we are not able to show the difference of IF based heuristics and the heuristics based on the number of children. 
 

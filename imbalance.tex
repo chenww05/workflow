@@ -1,14 +1,15 @@
-
-
 \section{Imbalance Metrics}
 \label{sec:imbalance}
 
-%Need to fix thisWith an o-DAG model, we can explicitly express the process of task clustering. For instance, in Fig. 3, two tasks t1 and t2, without data dependency between them, are merged into a clustered job j1. A job j is a single execution unit composed by one or multiple task(s). Job wrappers are commonly used to execute clustered jobs, but they add a overhead denoted the clustering delay c. Clustering delay measures the difference between the sum of the actual task runtimes and the job runtime seen by the job scheduler. After horizontal clustering, t1 and t2 in j1 can be executed in sequence or in parallel, if supported. In this paper, we consider sequential executions only. Given a single resource, the overall runtime for the workflow in Fig. 3 (left) is runtime1 = s1 +t1 +s2 +t2 , and the overall runtime for the clustered workflow in Fig. 3 (right) is runtime2 = s1 + c1 + t1 + t2. runtime1 > runtime2 as long as c1 < s2, which is the case of many distributed systems since the clustering delay within an execution node is usually shorter than the scheduling overhead across different execution nodes.Fig 3 shows a typical example of a Horizontal Clustering. 
-Fig. 3: An Example of Task Clustering.
-(HC) technique that groups tasks at the same horizontal level. In our work, we define the level of a task as the longest depth from the root task to this task (Depth First Search) because the longest depth controls the final release of this task.
-
-%Although the majority of the tasks within these applications are often relatively short running (from a few seconds to a few minutes), in aggregate they represent a significant amount of computation and data~\cite{LIGO}. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist and may adversely slowdown the application performance~\cite{Chen}. To minimize the impact of such overheads, task clustering techniques~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} have been developed to group \emph{fine-grained} tasks into \emph{coarse-grained} tasks so that the number of computational activities is reduced and their computational granularity is increased thereby reducing the (mostly scheduling related) system overheads~\cite{Chen}.
-
+%Need to fix this
+Horizontal Clustering (HC) is a technique that groups tasks at the same horizontal level. In our work, we define the level of a task as the longest depth from the root task to this task (Depth First Search) because the longest depth controls the final release of this task. With an o-DAG model, we can explicitly express the process of task clustering. For instance, in Fig.~\ref{fig:imbalance_hc}, two tasks $t_1$ and $t_2$, without data dependency between them, are merged into a clustered job $j_1$. A job $j$ is a single execution unit composed by one or multiple task(s). Job wrappers are commonly used to execute clustered jobs, but they add a overhead denoted the clustering delay $c$. Clustering delay measures the difference between the sum of the actual task runtimes and the job runtime seen by the job scheduler. After horizontal clustering, $t_1$ and $t_2$ in $j_1$ can be executed in sequence or in parallel, if supported. In this paper, we consider sequential executions only. Given a single resource, the overall runtime for the workflow in Fig.~\ref{fig:imbalance_hc} (left) is runtime1 = $s_1 +t_1 +s_2 +t_2$ , and the overall runtime for the clustered workflow in Fig.~\ref{fig:imbalance_hc} (right) is runtime2 = $s_1 + c_1 + t_1 + t_2$. runtime1 > runtime2 as long as $c1 < s2$, which is the case of many distributed systems since the clustering delay within an execution node is usually shorter than the scheduling overhead across different execution nodes.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figures/imbalance/hc.pdf}
+	\captionof{figure}{An Example of Horizontal Clustering.}
+	\label{fig:imbalance_hc}
+\end{figure}
+%Although the majority of the tasks within these applications are often relatively short running (from a few seconds to a few minutes), in aggregate they represent a significant amount of computation and data~\cite{LIGO}. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist and may adversely slowdown the application performance~\cite{Chen}. To minimize the impact of such overheads, task clustering techniques~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} have been developed to group \emph{fine-grained} tasks into \emph{coarse-grained} tasks so that the number of computational activities is reduced and their computational granularity is increased thereby reducing the (mostly scheduling related) system overheads~\cite{Chen}.
 
 Task clustering has been widely used to group fined-grained tasks into coarse-grained jobs ~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} . However, the challenge of balancing the runtime imbalance and dependency imbalance is still not yet addressed.
 
@@ -271,7 +272,7 @@ For high values of $HRV$, we just simply need to use HRB. Otherwise, we can use 
 
 \begin{figure}[htb]
 \centering
-	\includegraphics[width=\linewidth]{figure/exp3.pdf}
+	\includegraphics[width=\linewidth]{figures/imbalance/exp3.pdf}
 	\caption{Experiment 2: Influence of $HRV$ (LIGO workflow).}
 	\label{fig:incluence_of_hrv}
 	\vspace{-10pt}
