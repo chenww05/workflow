@@ -1,0 +1,115 @@
+%\documentclass[preprint,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%%  \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%\documentclass[final,5p,times]{elsarticle}
+\documentclass[final,5p,times,twocolumn]{elsarticle}
+
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+%% \usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\usepackage[section]{placeins}
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{algorithm,algpseudocode}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\captionsetup{compatibility=false}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{multicol}
+
+%\usepackage{cite}
+% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+
+\journal{Future Generation of Computer Systems}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%Should change the tilte to something better
+\title{Imbalance Optimization and Task Clustering in Scientific Worfklows}
+
+
+\author[isi]{Weiwei Chen\corref{cor1}}
+\ead{weiweich@acm.org}
+
+\author[isi]{Rafael Ferreira da Silva}
+\ead{rafsilva@isi.edu}
+
+\author[isi]{Ewa Deelman}
+\ead{deelman@isi.edu}
+
+
+\author[man]{Rizos Sakellariou}
+\ead{rizos@cs.man.ac.uk}
+
+\cortext[cor1]{Corresponding address: USC Information Sciences Institute, 4676 Admiralty Way Ste 1001, Marina del Rey, CA, USA, 90292, Tel: +1 310 448-8408}
+
+
+\address[isi]{University of Southern California, Information Sciences Institute, Marina del Rey, CA, USA}
+\address[man]{University of Manchester, School of Computer Science, Manchester, U.K.}
+
+
+\begin{abstract}
+Scientific workflows can be composed of many fine computational granularity tasks. The runtime of these tasks may be shorter than the duration of system overheads, for example, when using multiple resources of a cloud infrastructure. Task clustering is a runtime optimization technique that merges multiple short tasks into a single job such that the scheduling overhead is reduced and the overall runtime performance is improved. However, existing task clustering strategies only provide a coarse-grained approach that relies on an over-simplified workflow model. In our work, we examine the reasons that cause Runtime Imbalance and Dependency Imbalance in task clustering. Next, we propose quantitative metrics to evaluate the severity of the two imbalance problems respectively. Furthermore, we propose a series of task balancing methods to address these imbalance problems. Finally, we analyze their relationship with the performance of these task balancing methods. A trace-based simulation shows our methods can significantly improve the runtime performance of two widely used workflows compared to the actual implementation of task clustering.
+
+\end{abstract}
+
+\begin{keyword}
+Scientific workflows \sep Performance analysis \sep Scheduling \sep Workflow simulation \sep Task clustering \sep Load balancing
+\end{keyword}
+
+\end{frontmatter}
+
+\input{introduction.tex}
+\input{model.tex}
+\input{imbalance.tex}
+\input{evaluation.tex}
+
+\section{Future Work}
+
+
+
+
+%% References with bibTeX database:
+
+\bibliographystyle{elsarticle-num}
+\bibliography{biblio}
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use elsarticle-num.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
+
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-num.tex'.

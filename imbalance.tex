@@ -1,15 +1,7 @@
-\section{Imbalance Metrics}
+\section{Balanced Clustering}
 \label{sec:imbalance}
 
-%Need to fix this
-Horizontal Clustering (HC) is a technique that groups tasks at the same horizontal level. In our work, we define the level of a task as the longest depth from the root task to this task (Depth First Search) because the longest depth controls the final release of this task. With an o-DAG model, we can explicitly express the process of task clustering. For instance, in Fig.~\ref{fig:imbalance_hc}, two tasks $t_1$ and $t_2$, without data dependency between them, are merged into a clustered job $j_1$. A job $j$ is a single execution unit composed by one or multiple task(s). Job wrappers are commonly used to execute clustered jobs, but they add a overhead denoted the clustering delay $c$. Clustering delay measures the difference between the sum of the actual task runtimes and the job runtime seen by the job scheduler. After horizontal clustering, $t_1$ and $t_2$ in $j_1$ can be executed in sequence or in parallel, if supported. In this paper, we consider sequential executions only. Given a single resource, the overall runtime for the workflow in Fig.~\ref{fig:imbalance_hc} (left) is runtime1 = $s_1 +t_1 +s_2 +t_2$ , and the overall runtime for the clustered workflow in Fig.~\ref{fig:imbalance_hc} (right) is runtime2 = $s_1 + c_1 + t_1 + t_2$. runtime1 > runtime2 as long as $c1 < s2$, which is the case of many distributed systems since the clustering delay within an execution node is usually shorter than the scheduling overhead across different execution nodes.
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=0.6\linewidth]{figures/imbalance/hc.pdf}
-	\captionof{figure}{An Example of Horizontal Clustering.}
-	\label{fig:imbalance_hc}
-\end{figure}
-%Although the majority of the tasks within these applications are often relatively short running (from a few seconds to a few minutes), in aggregate they represent a significant amount of computation and data~\cite{LIGO}. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist and may adversely slowdown the application performance~\cite{Chen}. To minimize the impact of such overheads, task clustering techniques~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} have been developed to group \emph{fine-grained} tasks into \emph{coarse-grained} tasks so that the number of computational activities is reduced and their computational granularity is increased thereby reducing the (mostly scheduling related) system overheads~\cite{Chen}.
+%Although the majority of the tasks within these applications are often relatively short running (from a few seconds to a few minutes), in aggregate they represent a significant amount of computation and data~\cite{LIGO}. When executing these applications on a multi-machine distributed environment, such as the Grid or the Cloud, significant system overheads may exist and may adversely slowdown the application performance~\cite{Chen}. To minimize the impact of such overheads, task clustering techniques~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} have been developed to group \emph{fine-grained} tasks into \emph{coarse-grained} tasks so that the number of computational activities is reduced and their computational granularity is increased thereby reducing the (mostly scheduling related) system overheads~\cite{Chen}.
 
 Task clustering has been widely used to group fined-grained tasks into coarse-grained jobs ~\cite{Muthuvelu:2005:DJG:1082290.1082297, 4493929, Muthuvelu2010, Muthuvelu2013170, keat-2006, ang-2009, 4958835, Silva2013} . However, the challenge of balancing the runtime imbalance and dependency imbalance is still not yet addressed.
 
@@ -59,7 +51,7 @@ We define the \textbf{Impact Factor Variance} ($IFV$) of tasks as the standard d
 \label{eq:imbalance_impact_factor}
 	IF(t_u)=\sum_{t_v\in Child(t_u)}^{}\frac{IF(t_v)}{||Parent(t_v)||}
 \end{equation}
-where $Child(t_u)$ denotes the set of child tasks of $t_u$, and $||Parent(t_v)||$ the number of parent tasks of $t_v$. Compared to Eq.~\ref{eq:profiling_rr}, the difference is that we set the damping factor to be 0 since we are doing horizontal clustering and thus there is no need to differentiate the level of a task. For simplicity, we assume the $IF$ of a workflow exit task (e.g. $t_5$ in Fig.~\ref{fig:imbalance_dv}) as 1.0. For instance, consider the two workflows presented in Fig.~\ref{fig:imbalance_hifv}. $IF$ for $t_1$, $t_2$, $t_3$, and $t_4$ are computed as follows:
+where $Child(t_u)$ denotes the set of child tasks of $t_u$, and $||Parent(t_v)||$ the number of parent tasks of $t_v$. For simplicity, we assume the $IF$ of a workflow exit task (e.g. $t_5$ in Fig.~\ref{fig:imbalance_dv}) as 1.0. For instance, consider the two workflows presented in Fig.~\ref{fig:imbalance_hifv}. $IF$ for $t_1$, $t_2$, $t_3$, and $t_4$ are computed as follows:
 
 \begin{eqnarray}
 	\displaystyle  
@@ -80,7 +72,7 @@ Therefore, the $IFV$ value for {$t_1'$, $t_2'$, $t_3'$, $t_4'$} is 0.17, which m
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.85\linewidth]{figures/imbalance/hifv.pdf}
+	\includegraphics[width=0.85\linewidth]{figures/imbalance/dependency.pdf}
 	\captionof{figure}{Example of workflows with different data dependencies.}
 	\label{fig:imbalance_hifv}
 \end{figure}
@@ -211,72 +203,4 @@ In conclusion, these balancing methods have different preference on the selectio
 %	\label{tab:2}
 %	\vspace{-10pt}
 %\end{figure}
-
-
-
-% Section
-\subsection{Experiment Conditions}
-\label{sec:experiments}
-
-The experiments presented hereafter evaluate the performance of our balancing methods in comparison with an existing and effective task clustering strategy named Horizontal Clustering (HC)~\cite{Singh:2008:WTC:1341811.1341822}, which is widely used by workflow management systems such as Pegasus. 
-
-
-We extended the WorkflowSim~\cite{Chen2012a} simulator with the balanced clustering methods and imbalance metrics to simulate a distributed environment where we could evaluate the performance of our methods when varying the average data size and task runtime. The simulated computing platform is composed by 20 single homogeneous core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Each machine has 512MB of memory and the capacity to process 1,000 million instructions per second. Task scheduling is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
-%WorkflowSim is a feature-rich toolkit to simulate workflow planning and execution. It provides runtime randomization and multiple task clustering methods that we need. 
-
-Two workflows are used in the experiments: LIGO~\cite{LIGO} inspiral analysis, and Epigenomics~\cite{Epigenome}. 
-Both workflows are generated and varied using the WorkflowGenerator\footnote[1]{https://confluence.pegasus.isi.edu/display/pegasus/WorkflowGenerator}. LIGO is composed by 400 tasks and its workflow structure is presented in Fig.~\ref{fig:imbalance_shape} (top); Epigenomics has about 500 tasks and is structured as showed in Fig.~\ref{fig:imbalance_shape} (bottom). Runtime (average and task runtime distribution) and overhead (workflow engine delay, queue delay, and network bandwidth) information were collected from real traces production environments~\cite{Chen2011, Juve2013}, then used as input parameters for the simulations.
-We randomly select 20\% from LIGO workflow tasks and increase their task runtime by a factor of \emph{Ratio} to simulate the system variation in a production environment.
-As we have mentioned in Subsection~\ref{sec:methods} , the maximum number of clustered jobs is equal to the number of available resources multiplied by a \emph{clustering factor}. Similar to~\cite{Chen-balanced-2013}, we use $clustering~factor=2$ in the experiments conducted in this work. 
-
-%We first collected runtime information  (i.e., average and distribution of task runtime) and overhead information (including workflow engine delay, queue delay and network bandwidth) from the real traces that were run on real environments before. 
-%Part of runtime distribution and overhead information were shown in \cite{Juve2013} and \cite{Chen} respectively. 
-%Then we input these parameters into WorkflowSim and run these workflows repeatedly until the variance is less than 5\% of the average workflow runtime. 
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=0.6\linewidth]{figures/imbalance/shape_of_inspiral.pdf} \\
-	\includegraphics[width=0.7\linewidth]{figures/imbalance/shape_of_genome.pdf}
-	\caption{A simplified visualization of the LIGO Inspiral workflow (top) and Epigenomics workflow (bottom).}
-	\label{fig:imbalance_shape}
-\end{figure}
-
-Two sets of experiments are conducted. 
-
-Experiment 1 evaluates the reliability and the influence of average data size in our balancing methods, since data has becoming more and more intensive in scientific workflows~\cite{Juve2013}. In this experiment set, there is no runtime variance ($HRV = 0$). The original average data size (both input and output data) of the LIGO workflow is about 5MB, and of the Epigenomics workflows is about 45MB. We increase the average data size up to 5GB.
-
-Experiment 2 evaluates the influence of the runtime variation (\emph{HRV}) in our balancing methods. We assume a normal distribution to vary task runtimes based on average and standard deviation. In this experiment set, there is no variation on the data size.
-
-Simulation results present a confidence level of 95\%. We define the performance gain over HC ($\mu$) as the performance of the balancing methods related to the performance of Horizontal Clustering (HC). Thus, for values of $\mu > 0$ our balancing methods perform better than the HC method. Otherwise, the balancing methods perform poorer.
-
-\subsection{Results and Discussion}
-
-
-Experiment 1: Fig.~\ref{fig:imbalance_performance} (top) shows the performance gain over HC $\mu$ of the balancing methods compared to the HC method for the LIGO workflow. HIFB and HDB significantly increase the performance of the workflow execution. Both strategies capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution, which in this case is none. Fig.~\ref{fig:imbalance_performance} (bottom) shows the performance of the balancing methods for the Epigenomics workflow. When increasing the average data size, only HDB demonstrates significantly improvement related to HC. Investigating the structure of the Epigenomics workflow (Fig.~\ref{fig:imbalance_shape}-bottom), we can see that all tasks at the same horizontal level share the same IFs ($HIFV$ = 0), because each branch (surrounded by dash lines) happen to have the same amount of pipelines. Thus, HIFB has no performance improvement when compared to HC. However, for LIGO (Fig.~\ref{fig:imbalance_shape}-top), $HIFV \neq 0$, thus HIFB improves the workflow runtime performance.  
-%The intuition behind this difference between HDB and HIFB is that 
-HDB captures the strong connections between tasks (data dependencies) and HIFB captures the weak connections (similarity in terms of structure). In both workflows, $HDV$ is not zero thus HDB performs better than HC. 
-
-% It is clear that with the increase of the average data size, both HDB and HIFB perform better than HRB. The reason is that both HDB and HIFB can capture the structural information and runtime information, while HRB only focuses on runtime distribution but in this case there is no runtime variance at the horizontal level. 
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\linewidth]{figures/imbalance/exp2_ligo.pdf}
-	\includegraphics[width=\linewidth]{figures/imbalance/exp2_genome.pdf}
-	\caption{Experiment 1: Performance of the LIGO workflow (top) and the Epigenomics workflow (bottom).}
-	\label{fig:imbalance_performance}
-	\vspace{-10pt}
-\end{figure}
-
-Experiment 2: Fig.~\ref{fig:incluence_of_hrv} shows the performance gain $\mu$ when varying task runtimes for the LIGO workflow. As expected, when $HRV$ increases HRB over performs HC. However, HDB and HIFB demonstrate poor performance because they merge tasks based on data dependencies first, and then, they balance the runtime distribution. 
-For high values of $HRV$, we just simply need to use HRB. Otherwise, we can use either HDB or HIFB while in some cases HIFB fails to capture the structural information. 
-
-\begin{figure}[htb]
-\centering
-	\includegraphics[width=\linewidth]{figures/imbalance/exp3.pdf}
-	\caption{Experiment 2: Influence of $HRV$ (LIGO workflow).}
-	\label{fig:incluence_of_hrv}
-	\vspace{-10pt}
-\end{figure}
-
-
 
