@@ -9,6 +9,7 @@
 %\documentclass[final,5p,times]{elsarticle}
 \documentclass[final,5p,times,twocolumn]{elsarticle}
 
+\newcommand{\note}[2][inline]{\todo[color=red!30,#1]{\small\sf #2}}
 
 %% if you use PostScript figures in your article
 %% use the graphics package for simple commands
@@ -19,6 +20,7 @@
 %% \usepackage{epsfig}
 
 %% The amssymb package provides various useful mathematical symbols
+\usepackage{rotating,todonotes, xspace}
 \usepackage{amssymb}
 \usepackage[section]{placeins}
 \usepackage{makeidx}  % allows for indexgeneration
