@@ -64,23 +64,23 @@ The SIPHT workflow is conducting a wide search for small untranslated RNAs (sRNA
 
 Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows characteristics: number of tasks, average data size, and average task runtimes. 
 
-\begin{table}[!htb]
+\begin{table*}[!htb]
 	\centering
 	\small
 	\begin{tabular}{lrrrr}
 		\hline
-		Workflow & Tasks & Avg. Data Size &  Avg. Task Runtime \\
+		Workflow & Num of Tasks & Average Data Size &  Average Task Runtime \\
 		\hline
 		LIGO 		&800		& 5 MB	&228s\\
 		Montage 		&300		&3 MB	&11s\\
 		CyberShake 	&700		&148 MB 	& 23s\\
-		Epigenomics 	&165 	& 355 MB	&2952s\\
+		Epigenomics 	&165 		& 355 MB	&2952s\\
+		SIPHT		&1000		& 360KB & 180s\\
 		\hline
 	\end{tabular}
 	\caption{Summary of the scientific workflows characteristics.}
 	\label{tab:evaluation_workflows}
-\end{table} 
-\note{Add information for SIPHT in the table.}
+\end{table*} 
 
 
 
@@ -90,15 +90,40 @@ Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows cha
 In the experiments, we compare the performance of our methods to the Horizontal Clustering (HC)~\cite{Singh:2008:WTC:1341811.1341822} technique, which is widely used by Pegasus, and with two methods from the literature, DFJS~\cite{Muthuvelu:2005:DJG:1082290.1082297} and AFJS~\cite{Liu2009}.
 
 \paragraph{\textbf{HC}}
-The Horizontal Clustering (HC) algorithm...
-\note{Briefly explain the algorithm and add a pseudo-code.}
+
+Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal level of the workflow. The clustering granularity of a clustered job is controlled by the user by specifying either the number of tasks need to be merged into a single clustered job ('clusters.size') or the number of jobs per horizontal level of the workflow ('clusters.num'). This algorithm has been implemented and used in Pegasus WMS~\cite{Singh:2008:WTC:1341811.1341822}. For simplicity, we set the 'clusters.num' to be the same as the number of all VMs. In our prior work~\cite{Chen-balanced-2013}, we have compared the runtime performance of setting different clustering granularity. Algorithm~\ref{alg:evaluation_hc} shows the pseudo-code of HC. 
+
+
+\begin{algorithm}[htb]
+	\caption{ Horizontal Clustering algorithm}
+	\footnotesize
+	\label{alg:evaluation_hc}
+	\begin{algorithmic}[1]
+		\Require $W$: workflow; $C$: the required number of tasks per job determined by 'clusters.size' or 'clusters.num'; 
+		\Procedure{Clustering}{$W,C$}
+			\For{$level < $the depth of $W$}
+				\State $TL\gets $\ \Call{GetTasksAtLevel}{$w,level$} \Comment{Partition $W$ based on depth}
+				\State $CL\gets$  \ \Call{Merge}{$TL,C$} \Comment{Returns a list of clustered jobs}
+				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
+			\EndFor
+		\EndProcedure
+		\Procedure{Merge}{$TL, C$}
+			\State $J\gets$ \{\}\Comment{An empty job}
+			\While{$TL$ is not empty}
+				\State $J$.add (\ \Call{PopTasks}{$CL, C$}) \Comment{Get $C$ tasks that are not merged }
+				\State  $CL$.add( $J$)
+			\EndWhile
+			\State \textbf{return} $CL$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
 
 \paragraph{\textbf{DFJS}}
-The dynamic fine-grained job scheduler (DFJS)...
+The dynamic fine-grained job scheduler (DFJS) is developed by Muthuvelu et al. ~\cite{Muthuvelu:2005:DJG:1082290.1082297}, which groups tasks based on their runtime up to the resource capacity. 
 \note{Briefly explain the algorithm and add a pseudo-code.}
 
 \paragraph{\textbf{AFJS}}
-The adaptive fine-grained job scheduler (AFJS)...
+The adaptive fine-grained job scheduler (AFJS)...~\cite{Liu2009}
 \note{Briefly explain the algorithm and add a pseudo-code.}
 
 DFJS and AFJS require parameter tuning (e.g. resource capability) to efficiently cluster tasks into coarse-grained jobs. For instance, if the resource capacity is too high, all tasks may be grouped together, leading to loss of parallelism. In contrast, if it is too low, the algorithms do not group tasks, leading to no improvement over a control execution. For the comparison purposes of this work, we perform a parameter sweep study in order to optimize the algorithms for each workflow application described in Section~\ref{sec:applications}. However, explore all possible parameter combinations is a cumbersome and exhaustive task. Instead, we performed Binary Search...
@@ -168,12 +193,12 @@ Fig.~\ref{fig:evaluation_algorithm}  shows the performance gain over No Clusteri
 Experiment 2: Fig.~\ref{fig:evaluation_datasize} shows the performance gain of HIFB, HDB, HRB and HC for the LIGO Inspiral workflow. The reason we chose the LIGO Inspiral workflow is that it has most significant difference among these methods. It is clear that with the increase of average data size, HIFB performs better and better while HRB performs worse. We don't see much difference of HC and HDB while varying data size. The reason is HIFB is able to capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution only. Therefore, while the workflow is more data intensive, we observe better performance of HIFB and a worse performance of HRB. HC does not change much since it is randomly merges tasks at the same horizontal level without information about runtime or data dependency. HDB does not change much since its performance gain is already good enough. 
 
 
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figures/evaluation/workflowsize.eps}
-	\captionof{figure}{Performance Gain over No Clustering with different Workflow Sizes}
-	\label{fig:evaluation_wfsize}
-\end{figure}
+%\begin{figure}[!htb]
+%	\centering
+%	\includegraphics[width=1.0\linewidth]{figures/evaluation/workflowsize.eps}
+%	\captionof{figure}{Performance Gain over No Clustering with different Workflow Sizes}
+%	\label{fig:evaluation_wfsize}
+%\end{figure}
 
 \begin{figure}[!htb]
 	\centering
@@ -309,7 +334,8 @@ Level & Tasks & HRV   \\
 \end{table} 
 
 
-Fig.~\ref{fig:evaluation_resource_1} and Fig.~\ref{fig:evaluation_resource_2} vary the number of VMs with an average data size of 5MB and 500MB respectively. We can see that with the increase of VMs, the performance gain of all of these methods decrease while HIFB and HDB decrease more significantly than HRB and HC. The reason is similar to the case of Fig.~\ref{fig:evaluation_datasize} since HIFB and HDB are data dependency aware. The difference between HDB and HIFB is HDB captures the strong connections between tasks (data dependencies) and HIFB captures the weak connections (similarity in terms of structure). In some cases, HIFV is zero (i.e, Epigenomics) while HDV is less unlikely to be zero. Fig.~\ref{fig:evaluation_wfsize} compares the performance gain of these algorithms by varying the workflow sizes (number of tasks in a workflow). By default, the LIGO Inspiral workflow in our paper has 800 tasks. With the decrease of workflow size, we can see that all of these methods perform worse. The reason is there is less resource contention with the decrease of workflow size and therefore task clustering does not perform well. The performance of HRB is more stable since the increase (or decrease) of workflow size has more significant impact on data transfer (roughly linear increase in runtime and square increase in data transfer). 
+Fig.~\ref{fig:evaluation_resource_1} and Fig.~\ref{fig:evaluation_resource_2} vary the number of VMs with an average data size of 5MB and 500MB respectively. We can see that with the increase of VMs, the performance gain of all of these methods decrease while HIFB and HDB decrease more significantly than HRB and HC. The reason is similar to the case of Fig.~\ref{fig:evaluation_datasize} since HIFB and HDB are data dependency aware. The difference between HDB and HIFB is HDB captures the strong connections between tasks (data dependencies) and HIFB captures the weak connections (similarity in terms of structure). In some cases, HIFV is zero (i.e, Epigenomics) while HDV is less unlikely to be zero. 
+%Fig.~\ref{fig:evaluation_wfsize} compares the performance gain of these algorithms by varying the workflow sizes (number of tasks in a workflow). By default, the LIGO Inspiral workflow in our paper has 800 tasks. With the decrease of workflow size, we can see that all of these methods perform worse. The reason is there is less resource contention with the decrease of workflow size and therefore task clustering does not perform well. The performance of HRB is more stable since the increase (or decrease) of workflow size has more significant impact on data transfer (roughly linear increase in runtime and square increase in data transfer). 
 
 Experiment 3: Fig.~\ref{fig:evaluation_vc_cybershake},~\ref{fig:evaluation_vc_ligo},~\ref{fig:evaluation_vc_montage} and ~\ref{fig:evaluation_vc_genome} show the performance gain of combining VC along with our horizontal methods with four workflows respectively. For the CyberShake workflow as shown in Fig.~\ref{fig:evaluation_vc_cybershake}, we do not observe any significant change with VC since CyberShake does not have an explicit pipeline that we can perform vertical clustering (the performance gain of VC only is almost zero). 
 
