@@ -120,28 +120,84 @@ Three sets of experiments are conducted. Experiment 1 evaluates the performance 
 
 Experiment 2 evaluates the performance impact of the variation of average data size and the number of resources available in our balancing methods for one scientific workflow application (LIGO). The original average data size (both input and output data) of the LIGO workflow is about 5MB as shown in Table~\ref{tab:evaluation_workflows}. In this experiment, we increase the average data size up to 500MB to study the behavior of data intensive workflows.
 
-Experiment 3 evaluates the influence of combining our horizontal clustering methods with vertical clustering. We compare the performance gain under four scenario, VC-prior: we perform VC first and then HIFB, HDB, HDB or HDC; VC-posterior: we perform horizontal methods and then VC; no VC: horizontal methods only; and VC only. The motivation behind this experiment is that we believe VC will change imbalance metrics (HIFV, HDV and HRV) and we aim to show how these metrics can help us understand the performance of VC better. 
+Experiment 3 evaluates the influence of combining our horizontal clustering methods with vertical clustering (VC). We compare the performance gain under four scenarios: (\emph{i}) \emph{VC-prior}, VC is first performed and then HRB, HIFB, or HDB; (\emph{ii}) \emph{VC-posterior}, horizontal methods are performed first and then VC; (\emph{iii}) \emph{No-VC}, horizontal methods only; and (\emph{iv}) \emph{VC-only}, no horizontal methods. 
+%The motivation behind this experiment is that we believe VC will change imbalance metrics (HIFV, HDV and HRV) and we aim to show how these metrics can help us understand the performance of VC better. 
 
 %With these traces based information, we use WorkflowSim to vary algorithms used, resources, workflow size etc. to illustrate the different runtime performance of these methods. 
 %Runtime (average and task runtime distribution) and overhead (workflow engine delay, queue delay, and network bandwidth) information were collected from real traces production environments~\cite{Chen2011, Juve2013}, then used as input parameters for the simulations. 
 %where we could evaluate the performance of our methods when varying the average data size and task runtime.
 
+We define the performance gain over a control execution ($\mu$) as the performance of the balancing methods related to the performance of an execution without clustering. Thus, for values of $\mu > 0$ our balancing methods perform better than the control execution. Otherwise, the balancing methods perform poorer.
 
 
 % Results and discussion
 \subsection{Results and discussion}
 
 \paragraph{\textbf{Experiment 1}}
-Fig.~\ref{fig:evaluation_algorithm}  shows the performance gain over No Clustering (NC) $\mu$ of the balancing methods for the five workflows. We have a few conclusions from Fig.~\ref{fig:evaluation_algorithm}: (1). In general, all of these horizontal clustering methods improve the runtime performance significantly (up to 48\%) except for the case using HIFB in Epigenomics. The reason is that each branch of Epigenomics happen to have the same number of pipelines as Fig.~\ref{fig:evaluation_shape_big_genome} shows. In such case, the IFs of each task at the same horizontal level is the same and thus the HIFB cannot distinguish tasks and their dependency variance as shown in Table.~\ref{tab:evaluation_genome}. 
-(2). Among the four workflows, we see more significant improvement for the CyberShake workflow and the Montage workflow compared to Epigenomics and LIGO. The reason is Epigenomics and LIGO have a relatively short task runtime compared to the system overheads and task clustering can significantly improve the overall runtime. 
-(3). Among the five methods, in most of the cases, it is clear that our methods (HIFB, HDB and HRB) perform better than HC, DFJS* and AFJS*. The reason is that they don't take the runtime variance and dependency variance into consideration. As to the comparison among HIFB, HDB and HRB, we will show in Experiment 2. 
+Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the balancing methods for the five workflow applications over a control execution. All clustering techniques significantly improve (up to 48\%) the runtime performance of all workflow applications, except HC for SIPHT. Cybershake and Montage workflows have the highest gain and nearly the same performance independent of the algorithm. This is due to their symmetric structure and low values for the imbalance metrics as shown in Table~\ref{tab:evaluation_montage}. Epigenomics and LIGO have higher variance of runtime and distance, thus the lower performance gain. In particular, each branch of the Epigenomics workflow (Figure~\ref{fig:evaluation_shape_genome}) have the same number of pipelines, consequently $IF$ values of tasks in the same horizontal level are the same. Therefore, HIFB cannot distinguish tasks from different branches, which leads the system to a dependency imbalance problem. In such cases, HDB captures the dependency between tasks and yields better performance. Furthermore, Epigenomics and LIGO workflows have high runtime variance, which has higher impact on the performance than data dependency. Last, the performance gain of our balancing methods is comparable (and in some cases better) to the tuned algorithms DFJS* and AFJS*.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figures/evaluation/algorithm2.eps}
-	\captionof{figure}{Performance Gain over No Clustering of Six Algorithms (* indicates the best performance of DFJS and AFJS)}
+	\captionof{figure}{Experiment 1: performance gain ($\mu$) over a control execution for six algorithms (*~indicates the tuned performance of DFJS and AFJS).}
 	\label{fig:evaluation_algorithm}
 \end{figure}
+
+\begin{table}[htb]
+	\setlength{\tabcolsep}{12pt}
+	\centering
+	\small
+	\begin{tabular}{c|r|r|r|r}
+		& Tasks & HRV &  HIFV & HDV  \\ \hline
+		Level & \multicolumn{4}{c}{(a) \textbf{CyberShake}} \\
+		\hline
+		1 & 4 & 0.309 & 0.03 & 1.22 \\
+		2 & 347 & 0.282 & 0.00 & 0.00 \\
+		3 & 348 & 0.397 & 0.00 & 26.20 \\
+		4 & 1 & 0.000 & 0.00 & 0.00 \\
+		\hline
+		Level & \multicolumn{4}{c}{(b) \textbf{Epigenomics}} \\
+		\hline
+		1 & 3 & 0.327 & 0.00 & 0.00  \\
+		2 & 39 & 0.393 & 0.00 & 578.00 \\
+		3 & 39 & 0.328 & 0.00 & 421.00 \\
+		4 & 39 & 0.358 & 0.00 & 264.00 \\
+		5 &39 & 0.290 & 0.00 & 107.00 \\
+		6 & 3 & 0.247 & 0.00 & 0.00  \\
+		7 &1  & 0.000 & 0.00 & 0.00 \\
+		8 &1 & 0.000 & 0.00 & 0.00 \\
+		9 & 1 & 0.000 & 0.00 & 0.00 \\
+		\hline
+		Level & \multicolumn{4}{c}{(c) \textbf{LIGO}} \\
+		\hline
+		1 & 191 & 0.024 & 0.01 & 10097.00 \\
+		2 & 191 & 0.279 & 0.01 & 8264.00 \\
+		3 & 18 & 0.054 & 0.00 & 174.00 \\
+		4 & 191 & 0.066 & 0.01 & 5138.00 \\
+		5 & 191 & 0.271 & 0.01 & 3306.00 \\
+		6 & 18 &  0.040 & 0.00 & 43.70 \\
+		\hline		
+		Level & \multicolumn{4}{c}{(d) \textbf{Montage}} \\
+		\hline
+		1 &49 & 0.022 & 0.01 & 189.17 \\
+		2 & 196 & 0.010 & 0.00 & 0.00 \\
+		3 & 1 & 0.000 & 0.00 & 0.00 \\
+		4 & 1 & 0.000 & 0.00 & 0.00 \\
+		5 &49 & 0.017 & 0.00 & 0.00 \\
+		6 & 1 & 0.000 & 0.00 & 0.00 \\
+		7 &1  & 0.000 & 0.00 & 0.00 \\
+		8 &1 & 0.000 & 0.00 & 0.00 \\
+		9 & 1 & 0.000 & 0.00 & 0.00 \\
+	\end{tabular}
+	\caption{Experiment 1: imbalance metrics.}
+	\label{tab:evaluation_montage}
+\end{table} 
+
+
+
+\paragraph{\textbf{Experiment 2}} 
+Fig.~\ref{fig:evaluation_datasize} shows the performance gain of HIFB, HDB, HRB and HC for the LIGO Inspiral workflow. The reason we chose the LIGO Inspiral workflow is that it has most significant difference among these methods. It is clear that with the increase of average data size, HIFB performs better and better while HRB performs worse. We don't see much difference of HC and HDB while varying data size. The reason is HIFB is able to capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution only. Therefore, while the workflow is more data intensive, we observe better performance of HIFB and a worse performance of HRB. HC does not change much since it is randomly merges tasks at the same horizontal level without information about runtime or data dependency. HDB does not change much since its performance gain is already good enough. 
+
 
 \begin{figure*}[!htb]
 	\centering
@@ -165,7 +221,6 @@ Fig.~\ref{fig:evaluation_algorithm}  shows the performance gain over No Clusteri
 \end{figure}
 
 
-Experiment 2: Fig.~\ref{fig:evaluation_datasize} shows the performance gain of HIFB, HDB, HRB and HC for the LIGO Inspiral workflow. The reason we chose the LIGO Inspiral workflow is that it has most significant difference among these methods. It is clear that with the increase of average data size, HIFB performs better and better while HRB performs worse. We don't see much difference of HC and HDB while varying data size. The reason is HIFB is able to capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution only. Therefore, while the workflow is more data intensive, we observe better performance of HIFB and a worse performance of HRB. HC does not change much since it is randomly merges tasks at the same horizontal level without information about runtime or data dependency. HDB does not change much since its performance gain is already good enough. 
 
 
 \begin{figure}[!htb]
@@ -206,88 +261,10 @@ Experiment 2: Fig.~\ref{fig:evaluation_datasize} shows the performance gain of H
 	\label{fig:evaluation_vc_genome}
 \end{figure}
 
-\begin{table}[!htb]
-\caption{Imbalance Metrics (Montage)}
-\label{tab:evaluation_montage}
-\centering
-\begin{tabular}{lrrrrrrrr}
-\hline
-Level & Tasks & HRV &  HIFV & HDV  \\
-
-\hline
-1 &49 & 0.022 & 0.007 & 189.170 \\
-2 & 196 & 0.010 & 0 & 0\\
-3 & 1 & 0 & 0 & 0\\
-4 & 1 & 0 & 0 & 0\\
-5 &49 & 0.017 & 0 & 0\\
-6 & 1 & 0 & 0 & 0 \\
-7 &1  & 0 & 0 & 0\\
-8 &1 & 0 & 0 & 0\\
-9 & 1 & 0 & 0 & 0\\
-\hline
-\end{tabular}
-\end{table} 
-
-\begin{table}[!htb]
-\caption{Imbalance Metrics (Epigenomics)}
-\label{tab:evaluation_genome}
-\centering
-\begin{tabular}{lrrrrrrrr}
-\hline
-Level & Tasks & HRV &  HIFV & HDV  \\
-
-\hline
-1 & 3 & 0.327 & 0 & 0 \\
-2 & 39 & 0.393 & 0 & 578\\
-3 & 39 & 0.328 & 0 & 421\\
-4 & 39 & 0.358 & 0 & 264\\
-5 &39 & 0.290 & 0 & 107\\
-6 & 3 & 0.247 & 0 & 0 \\
-7 &1  & 0 & 0 & 0\\
-8 &1 & 0 & 0 & 0\\
-9 & 1 & 0 & 0 & 0\\
-\hline
-\end{tabular}
-\end{table} 
-
-\begin{table}[!htb]
-\caption{Imbalance Metrics (CyberShake)}
-\label{tab:evaluation_cybershake}
-\centering
-\begin{tabular}{lrrrrrrrr}
-\hline
-Level & Tasks & HRV &  HIFV & HDV  \\
-
-\hline
-1 & 4 & 0.309 & 0.031 & 1.225 \\
-2 & 347 & 0.282 & 0 & 0\\
-3 & 348 & 0.397 & 0 & 26.2\\
-4 & 1 & 0 & 0 & 0 \\
-
-\hline
-\end{tabular}
-\end{table} 
 
 
-\begin{table}[!htb]
-\caption{Imbalance Metrics (LIGO)}
-\label{tab:evaluation_ligo}
-\centering
-\begin{tabular}{lrrrrrrrr}
-\hline
-Level & Tasks & HRV &  HIFV & HDV  \\
 
-\hline
-1 & 191 & 0.024 & 0.01 & 10097 \\
-2 & 191 & 0.279 & 0.01 & 8264\\
-3 & 18 & 0.054 & 0 & 174\\
-4 & 191 & 0.066 & 0.01 & 5138\\
-5 & 191 & 0.271 & 0.01 & 3306\\
-6 & 18 &  0.04 & 0 & 43.7\\
 
-\hline
-\end{tabular}
-\end{table} 
 
 
 \begin{table}[!htb]
