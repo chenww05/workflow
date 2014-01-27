@@ -23,6 +23,8 @@ The Laser Interferometer Gravitational Wave Observatory (LIGO) workflows are use
 \paragraph{\textbf{Montage}}
 Montage is an astronomy application that is used to construct large image mosaics of the sky. Input images are reprojected onto a sphere and overlap is calculated for each input image. The application re-projects input images to the correct orientation while keeping background emission level constant in all images. The images are added by rectifying them into a common flux scale and background level. Finally the reprojected images are co- added into a final mosaic. The resulting mosaic image can provide a much deeper and detailed understanding of the portion of the sky in question. Figure~\ref{fig:evaluation_shape_montage} illustrates a small Montage workflow. The size of the workflow depends on the number of images used in constructing the desired mosaic of the sky. The structure of the workflow changes to accommodate increases in the number of inputs, which corresponds to an increase in the number of computational tasks.
 
+
+
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.55\linewidth]{figures/evaluation/montage.pdf} \\
@@ -48,6 +50,16 @@ The Epigenomics workflow is a pipeline workflow. Initial data are acquired from 
 	\includegraphics[width=\linewidth]{figures/evaluation/genome.pdf} \\
 	\caption{A simplified visualization of the Epigenomics workflow}
 	\label{fig:evaluation_shape_genome}
+\end{figure}
+
+\paragraph{\textbf{SIPHT}}
+The SIPHT workflow is conducting a wide search for small untranslated RNAs (sRNAs) that regulate several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using PEGASUS. These involve the prediction of Rho-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown on Figure~\ref{fig:evalution_shape_sipht}. 
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figures/evaluation/sipht.pdf} \\
+	\caption{A simplified visualization of the SIPHT workflow}
+	\label{fig:evaluation_shape_sipht}
 \end{figure}
 
 Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows characteristics: number of tasks, average data size, and average task runtimes. 
@@ -114,12 +126,7 @@ The original average data size (both input and output data) of the LIGO workflow
 Experiment 3 evaluates the influence of combining our horizontal clustering methods with vertical clustering. We compare the performance gain under four scenario, VC-prior: we perform VC first and then HIFB, HDB, HDB or HDC; VC-posterior: we perform horizontal methods and then VC; no VC: horizontal methods only; and VC only. The motivation behind this experiment is that we believe VC will change imbalance metrics (HIFV, HDV and HRV) and we aim to show how these metrics can help us understand the performance of VC better. 
 
 \subsection{Results and Discussion}
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=0.8\linewidth]{figures/evaluation/big_genome.pdf} \\
-	\caption{A visualization of the Epigenomics workflow}
-	\label{fig:evaluation_shape_big_genome}
-\end{figure}
+
 
 \begin{figure}[!htb]
 	\centering
@@ -148,7 +155,7 @@ Experiment 3 evaluates the influence of combining our horizontal clustering meth
 	\captionof{figure}{Performance Gain over No Clustering with Different Number of Resources (Average data size is 500MB)).}
 	\label{fig:evaluation_resource_2}
 \end{figure}
-Experiment 1: Fig.~\ref{fig:evaluation_algorithm}  shows the performance gain over No Clustering (NC) $\mu$ of the balancing methods for the four workflows. We have a few conclusions from Fig.~\ref{fig:evaluation_algorithm}: (1). In general, all of these horizontal clustering methods improve the runtime performance significantly (up to 48\%) except for the case using HIFB in Epigenomics. The reason is that each branch of Epigenomics happen to have the same number of pipelines as Fig.~\ref{fig:evaluation_shape_big_genome} shows. In such case, the IFs of each task at the same horizontal level is the same and thus the HIFB cannot distinguish tasks and their dependency variance as shown in Table.~\ref{tab:evaluation_genome}. 
+Experiment 1: Fig.~\ref{fig:evaluation_algorithm}  shows the performance gain over No Clustering (NC) $\mu$ of the balancing methods for the five workflows. We have a few conclusions from Fig.~\ref{fig:evaluation_algorithm}: (1). In general, all of these horizontal clustering methods improve the runtime performance significantly (up to 48\%) except for the case using HIFB in Epigenomics. The reason is that each branch of Epigenomics happen to have the same number of pipelines as Fig.~\ref{fig:evaluation_shape_big_genome} shows. In such case, the IFs of each task at the same horizontal level is the same and thus the HIFB cannot distinguish tasks and their dependency variance as shown in Table.~\ref{tab:evaluation_genome}. 
 (2). Among the four workflows, we see more significant improvement for the CyberShake workflow and the Montage workflow compared to Epigenomics and LIGO. The reason is Epigenomics and LIGO have a relatively short task runtime compared to the system overheads and task clustering can significantly improve the overall runtime. 
 (3). Among the five methods, in most of the cases, it is clear that our methods (HIFB, HDB and HRB) perform better than HC, DFJS* and AFJS*. The reason is that they don't take the runtime variance and dependency variance into consideration. As to the comparison among HIFB, HDB and HRB, we will show in Experiment 2. 
 
