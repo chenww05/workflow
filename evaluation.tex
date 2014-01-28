@@ -199,9 +199,8 @@ The original DFJS and AFJS choose these parameters empirically, however, which r
 	\label{fig:evaluation_dfjs_montage}
 \end{figure}
 
-\note{Briefly describe how did you perform the binary search.}
 
-For simplicity, we use DFJS* and AFJS* to indicate their best searched performance in the rest of this work.
+For simplicity, we use DFJS* and AFJS* to indicate their best estimated performance in the rest of this work.
 
 %In practice, these algorithms are not feasible to use since parameter tuning requires a lot of prior knowledge and it takes much time to search the parameter space without proper heuristics. . 
 
@@ -212,7 +211,7 @@ For simplicity, we use DFJS* and AFJS* to indicate their best searched performan
 We adopt a trace-based simulation approach, where we extended the WorkflowSim~\cite{Chen2012a} simulator with the balanced clustering methods and imbalance metrics to simulate a controlled distributed environment. 
 WorkflowSim is a workflow simulator that extends from CloudSim~\cite{Calheiros2011} by providing support of task clustering, task scheduling and resource provisioning at the workflow level. It has been recently used in multiple workflow study areas~\cite{6683907,Chen2012, jrad2013broker} and its correctness has been verified in~\cite{Chen2012a}. 
 
-The simulated computing platform is composed by 20 single homogeneous core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Amazon EC2 is a commercial, public cloud that is been widely used in distributed computing, in particular for scientific workflows~\cite{Juve09scientificworkflow}. FutureGrid is a distributed, high-performance testbed that provides scientists with a set of computing resources to develop parallel, grid, and cloud applications. Each simulated virtual machine (VM) has 512MB of memory and the capacity to process 1,000 million instructions per second. \note{Add information about network bandwidth.} Task scheduling algorithm is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
+The simulated computing platform is composed by 20 single homogeneous core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Amazon EC2 is a commercial, public cloud that is been widely used in distributed computing, in particular for scientific workflows~\cite{Juve09scientificworkflow}. FutureGrid is a distributed, high-performance testbed that provides scientists with a set of computing resources to develop parallel, grid, and cloud applications. Each simulated virtual machine (VM) has 512MB of memory and the capacity to process 1,000 million instructions per second. The default network bandwidth is 15MB according to the real environment in FutureGrid where our traces were collected. Task scheduling algorithm is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
 
 We collected workflow execution traces~\cite{Chen2011, Juve2013} (including overhead and task runtime information) from real runs (executed on FutureGrid and Amazon EC2) of the scientific workflow applications described in Section~\ref{sec:applications}. The traces are used to fill the Workflow Generator toolkit~\cite{WorkflowGenerator} to generate synthetic workflows to perform simulations with several different configurations under controlled conditions. The toolkit uses the information gathered from actual scientific workflow executions to generate synthetic workflows resembling those used by real world scientific applications. The number of inputs to be processed, the number of tasks in the workflow, and their composition determine the structure of the generated workflow.
 
