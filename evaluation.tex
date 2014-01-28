@@ -185,6 +185,18 @@ The adaptive fine-grained job scheduler (AFJS)~\cite{Liu2009} is an extension of
 \end{algorithm}
 
 DFJS and AFJS require parameter tuning (e.g. maximum runtime) to efficiently cluster tasks into coarse-grained jobs. For instance, if the maximum runtime is too high, all tasks may be grouped together, leading to loss of parallelism. In contrast, if the maximum runtime is too low, the algorithms do not group tasks, leading to no improvement over a control execution. For the comparison purposes of this work, we perform a parameter sweep study in order to optimize the algorithms for each workflow application described in Section~\ref{sec:applications}. However, explore all possible parameter combinations is a cumbersome and exhaustive task. Instead, we performed Binary Search...
+
+The original DFJS and AFJS choose these parameters empirically, however, which requires a lot of prior knowledge about workflows. In our case, we first estimate the upper bound of max.runtime ($n$) to be the sum of all the task runtimes and the lower bound of max.runtime ($m$) to be 1 second for simplicity. We then divide all the data points in to ten chunks and sample one data point from each chunk. Then we choose the chunk that has the lowest makespan and set the new $n$ and $m$ to be the range of the selected chunk. We repeat these steps until it converges. We do not provide a mathematical proof of its correctness since it is not our focus. Instead we show the relationship between the makespan and the max.runtime for an example Montage workflow in Fig~\ref{fig:evaluation_dfjs_montage} (the experiment conditions will be discussed in Section~\ref{sec:experiment_conditions}). From the figure, we know that even though there are multiple local minimal makespan, these data points are quite close to each other and the difference between their values (about seconds) is negligible. As a rough estimation of the minimal makespan, our approach is acceptable. 
+
+
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figures/evaluation/max_runtime_montage.pdf}
+	\captionof{figure}{The relationship between the makespan of workflow and the specified maximum runtime in DFJS (Montage).}
+	\label{fig:evaluation_dfjs_montage}
+\end{figure}
+
 \note{Briefly describe how did you perform the binary search.}
 
 For simplicity, we use DFJS* and AFJS* to indicate their best searched performance in the rest of this work.
@@ -194,6 +206,7 @@ For simplicity, we use DFJS* and AFJS* to indicate their best searched performan
 
 % Experiment conditions
 \subsection{Experiment conditions}
+\label{sec:experiment_conditions}
 We adopt a trace-based simulation approach, where we extended the WorkflowSim~\cite{Chen2012a} simulator with the balanced clustering methods and imbalance metrics to simulate a controlled distributed environment. 
 WorkflowSim is a workflow simulator that extends from CloudSim~\cite{Calheiros2011} by providing support of task clustering, task scheduling and resource provisioning at the workflow level. It has been recently used in multiple workflow study areas~\cite{Chen2012, jrad2013broker, Chen-balanced-2013} and its correctness has been verified in~\cite{Chen2012a}. 
 
@@ -385,7 +398,7 @@ For the Montage workflow as shown in Fig.~\ref{fig:evaluation_vc_montage}, we do
 
 For the Epigenomics workflow as shown in Fig.~\ref{fig:evaluation_vc_genome}, we observe similar phenomenon in HRB compared to the LIGO Inspiral workflow. As to the performance of HDB, VC-prior merges tasks at the second, third, fourth and fifth level together and thus HDB has less space to further improve the overall runtime. 
 
-The SIPHT workflow as shown 
+The SIPHT workflow as shown in Fig.~\ref{fig:evaluation_shape_sipht} does not have enough pipelines to perform vertical clustering and therefore we do not show its results of combining vertical clustering. 
  
 %HIFB and HDB significantly increase the performance of the workflow execution. Both strategies capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution, which in this case is none. Fig.~\ref{fig:imbalance_performance} (bottom) shows the performance of the balancing methods for the Epigenomics workflow. When increasing the average data size, only HDB demonstrates significantly improvement related to HC. Investigating the structure of the Epigenomics workflow (Fig.~\ref{fig:imbalance_shape}-bottom), we can see that all tasks at the same horizontal level share the same IFs ($HIFV$ = 0), because each branch (surrounded by dash lines) happen to have the same amount of pipelines. Thus, HIFB has no performance improvement when compared to HC. However, for LIGO (Fig.~\ref{fig:imbalance_shape}-top), $HIFV \neq 0$, thus HIFB improves the workflow runtime performance.  
 %The intuition behind this difference between HDB and HIFB is that 
