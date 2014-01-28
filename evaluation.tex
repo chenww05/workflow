@@ -325,15 +325,15 @@ Figures~\ref{fig:evaluation_resource_1} and~\ref{fig:evaluation_resource_2} show
 
 
 \paragraph{\textbf{Experiment 3}}
-Fig.~\ref{fig:evaluation_vc_cybershake},~\ref{fig:evaluation_vc_ligo},~\ref{fig:evaluation_vc_montage} and ~\ref{fig:evaluation_vc_genome} show the performance gain of combining VC along with our horizontal methods with four workflows respectively. For the CyberShake workflow as shown in Fig.~\ref{fig:evaluation_vc_cybershake}, we do not observe any significant change with VC since CyberShake does not have an explicit pipeline that we can perform vertical clustering (the performance gain of VC only is almost zero). 
-
+Figure~\ref{fig:evaluation_vc_cybershake} shows the performance gain $\mu$ for the Cybershake workflow over a control execution when using vertical clustering (VC) combined to our balancing methods. Vertical clustering does not aggregate any improvement to the Cybershake workflow ($\mu$(\emph{VC-only}) $\approx 0.2\%$), because the workflow structure has no explicit pipeline. Similarly, the lack of pipelines in the SIPHT workflow produces the same results, due to  workflow structure.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figures/results/vc_cybershake.eps}
-	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Cybershake workflow over control execution.}
+	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Cybershake workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_cybershake}
 \end{figure}
+
 
 
 
