@@ -232,7 +232,7 @@ We define the performance gain over a control execution ($\mu$) as the performan
 
 % Results and discussion
 \subsection{Results and discussion}
-
+\label{sec:results}
 \paragraph{\textbf{Experiment 1}}
 Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the balancing methods for the five workflow applications over a control execution. All clustering techniques significantly improve (up to 48\%) the runtime performance of all workflow applications, except HC for SIPHT. Cybershake and Montage workflows have the highest gain and nearly the same performance independent of the algorithm. This is due to their symmetric structure and low values for the imbalance metrics as shown in Table~\ref{tab:evaluation_montage}. Epigenomics and LIGO have higher variance of runtime and distance, thus the lower performance gain. In particular, each branch of the Epigenomics workflow (Figure~\ref{fig:evaluation_shape_genome}) have the same number of pipelines, consequently $IF$ values of tasks in the same horizontal level are the same. Therefore, HIFB cannot distinguish tasks from different branches, which leads the system to a dependency imbalance problem. In such cases, HDB captures the dependency between tasks and yields better performance. Furthermore, Epigenomics and LIGO workflows have high runtime variance, which has higher impact on the performance than data dependency. Last, the performance gain of our balancing methods is comparable (and in some cases better) to the tuned algorithms DFJS* and AFJS*.
 
