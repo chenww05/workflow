@@ -73,11 +73,11 @@ Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows cha
 		 & \multicolumn{1}{c}{Number} & \multicolumn{1}{c}{Average} &  \multicolumn{1}{c}{Average} \\
 		Workflow	& of Tasks	 & Data Size & Task Runtime \\
 		\hline
-		LIGO 		&800		& 5 MB	&228s\\
+		LIGO 		&800		& 5 MB	& 228s\\
 		Montage 		&300		&3 MB	&11s\\
 		CyberShake 	&700		&148 MB 	& 23s\\
-		Epigenomics 	&165 		& 355 MB	&2952s\\
-		SIPHT		&1000		& 360KB & 180s\\
+		Epigenomics 	&165 	& 355 MB	& 2952s\\
+		SIPHT		&1000	& 360 KB 	& 180s\\
 		\hline
 	\end{tabular}
 	\caption{Summary of the scientific workflows characteristics.}
@@ -93,7 +93,7 @@ In the experiments, we compare the performance of our methods to the Horizontal 
 
 \paragraph{\textbf{HC}}
 
-Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal level of the workflow. The clustering granularity of a clustered job is controlled by the user by specifying either the number of tasks need to be merged into a single clustered job (clusters.size) or the number of jobs per horizontal level of the workflow (clusters.num). This algorithm has been implemented and used in Pegasus WMS~\cite{Singh:2008:WTC:1341811.1341822}. For simplicity, we set the clusters.num to be the same as the number of all VMs. In our prior work~\cite{Chen-balanced-2013}, we have compared the runtime performance of setting different clustering granularity. Algorithm~\ref{alg:evaluation_hc} shows the pseudo-code of HC. 
+Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal level of the workflow. The clustering granularity of a clustered job is controlled by the user by specifying either the number of tasks need to be merged into a single clustered job (clusters.size) or the number of jobs per horizontal level of the workflow (clusters.num). This algorithm has been implemented and used in Pegasus WMS~\cite{Singh:2008:WTC:1341811.1341822}. For simplicity, we set the clusters.num to be the same as the number of all VMs. In our prior work~\cite{6683907}, we have compared the runtime performance of setting different clustering granularity. Algorithm~\ref{alg:evaluation_hc} shows the pseudo-code of HC. 
 
 
 \begin{algorithm}[htb]
