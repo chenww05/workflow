@@ -186,4 +186,36 @@ Table~\ref{tab:2} summarizes the imbalance metrics and balancing methods present
 	\label{tab:2}
 %	\vspace{-10pt}
 \end{figure}
+\subsection{Combining Vertical Clustering Methods}
+\label{sec:vertical}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.35\linewidth]{figures/imbalance/vertical_clustering.pdf}
+	\captionof{figure}{An example of Vertical Clustering.}
+	\label{fig:imbalance_vc}
+\end{figure}
+
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.35\linewidth]{figures/imbalance/vertical_clustering_prior.pdf}
+	\captionof{figure}{Vertical Clustering Prior.}
+	\label{fig:imbalance_vc_prior}
+\end{figure}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.35\linewidth]{figures/imbalance/vertical_clustering_posterior.pdf}
+	\captionof{figure}{Vertical Clustering Posterior.}
+	\label{fig:imbalance_vc_posterior}
+\end{figure}
+
+In this section, we discuss how we combine the horizontal clustering methods with vertical clustering. For one example workflow shown in Fig.~\ref{fig:imbalance_vc}, we may simply merge tasks at the fourth level and tasks at the fifth level vertically. Vertical clustering can always guarantee a non-negative improvement over the case without clustering since it reduces the system overheads and data transfer between the tasks in the same pipeline. Horizontal clustering does not have the same guarantee since its performance depends on the comparison of system overheads and task runtime. However, vertical clustering has limited performance improvement if we do not have many pipelines to perform it. Therefore, we are interested to understand how we should combine them together in an efficient way. Here we indicate two approaches to combine vertical clustering and all the horizontal clustering methods: 
+\textbf{Vertical Clustering Prior} means we perform vertical clustering first and then horizontal clustering methods. Fig.~\ref{fig:imbalance_vc_prior} shows that after performing vertical clustering as shown in Fig.~\ref{fig:imbalance_vc}, we can further merge clustered jobs together based on the different criteria (HIFB, HDB, HRB or HC). 
+
+\textbf{Vertical Clustering Posterior} means we perform horizontal clustering methods first and then vertical clustering. For the same workflow, assuming we merge tasks horizontally as shown in Fig.~\ref{fig:imbalance_vc_posterior}, we can see that we cannot perform vertical clustering to clustered jobs at the fourth level and the fifth level since the original pipeline structures have been destroyed by horizontal clustering. This phenomenon suggests us VC-posterior may work better compared to VC-prior. We will verify our hypothesis in Section~\ref{sec:results}. We will also compared the two combining approaches with \textbf{VC-only}, which means we perform vertical clustering only and \textbf{No-VC}, which means we just perform horizontal clustering methods without vertical clustering. 
+
+
+
+
 
