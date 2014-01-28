@@ -195,16 +195,16 @@ For simplicity, we use DFJS* and AFJS* to indicate their best searched performan
 % Experiment conditions
 \subsection{Experiment conditions}
 We adopt a trace-based simulation approach, where we extended the WorkflowSim~\cite{Chen2012a} simulator with the balanced clustering methods and imbalance metrics to simulate a controlled distributed environment. 
-WorkflowSim is a workflow simulator that extends from CloudSim~\cite{Calheiros2011} by providing support of task clustering, task scheduling and resource provisioning at the workflow level. It has been recently used in multiple workflow study areas~\cite{Chen2012, jrad2013broker, Chen-balanced-2013} and its correctness has been verified in~\cite{Chen2012a}. 
+WorkflowSim is a workflow simulator that extends from CloudSim~\cite{Calheiros2011} by providing support of task clustering, task scheduling and resource provisioning at the workflow level. It has been recently used in multiple workflow study areas~\cite{Chen-balanced-2013,Chen2012, jrad2013broker} and its correctness has been verified in~\cite{Chen2012a}. 
 
-The simulated computing platform is composed by 20 single homogeneous core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Amazon EC2 is a commercial, public cloud that is been widely used in distributed computing, in particular for scientific workflows~\cite{Juve09scientificworkflow}. FutureGrid is a distributed, high-performance testbed that provides scientists with a set of computing resources to develop parallel, grid, and cloud applications. Each simulated VM has 512MB of memory and the capacity to process 1,000 million instructions per second. Task scheduling algorithm is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
+The simulated computing platform is composed by 20 single homogeneous core virtual machines (worker nodes), which is the quota per user of some typical distributed environments such as Amazon EC2~\cite{AmazonAWS} and FutureGrid~\cite{FutureGrid}. Amazon EC2 is a commercial, public cloud that is been widely used in distributed computing, in particular for scientific workflows~\cite{Juve09scientificworkflow}. FutureGrid is a distributed, high-performance testbed that provides scientists with a set of computing resources to develop parallel, grid, and cloud applications. Each simulated virtual machine (VM) has 512MB of memory and the capacity to process 1,000 million instructions per second. \note{Add information about network bandwidth.} Task scheduling algorithm is data-aware, i.e. tasks are scheduled to resources which have the most input data available.
 
 We collected workflow execution traces~\cite{Chen2011, Juve2013} (including overhead and task runtime information) from real runs (executed on FutureGrid and Amazon EC2) of the scientific workflow applications described in Section~\ref{sec:applications}. The traces are used to fill the Workflow Generator toolkit~\cite{WorkflowGenerator} to generate synthetic workflows to perform simulations with several different configurations under controlled conditions. The toolkit uses the information gathered from actual scientific workflow executions to generate synthetic workflows resembling those used by real world scientific applications. The number of inputs to be processed, the number of tasks in the workflow, and their composition determine the structure of the generated workflow.
 
 Three sets of experiments are conducted. Experiment 1 evaluates the performance gain ($\mu$) of our balancing methods (HRB, HIFB, and HDB) over a control execution (No Clustering). The goal of the experiment is to identify conditions where each method work best and worst. In addition, we also evaluate the performance gain of using workflow structure metrics (HRV, HIFV, and HDV), which require less \emph{a-priori} knowledge from task and resource characteristics, over task clustering techniques from the literature (HC, DFJS*, and AFJS*).
 %Since DFJS requires one parameter (resource capacity) and AFJS requires two parameters (resource capacity and bandwidth capacity), we search all possible parameters to use their optimal performance gain. In practice, their performance should be equal to or lower than the optimal values. 
 
-Experiment 2 evaluates the performance impact of the variation of average data size and the number of resources available in our balancing methods for one scientific workflow application (LIGO). The original average data size (both input and output data) of the LIGO workflow is about 5MB as shown in Table~\ref{tab:evaluation_workflows}. In this experiment, we increase the average data size up to 500MB to study the behavior of data intensive workflows.
+Experiment 2 evaluates the performance impact of the variation of average data size and the number of resources available in our balancing methods for one scientific workflow application (LIGO). The original average data size (both input and output data) of the LIGO workflow is about 5MB as shown in Table~\ref{tab:evaluation_workflows}. In this experiment, we increase the average data size up to 500MB to study the behavior of data intensive workflows. We control resource contingence by varying the number of available resources (VMs). High resource contingence is achieved by setting the number of available VMs to 5, which represent less than 10\% of the required resources to compute all tasks in parallel. On the other hand, low contingence is achieved when the number of available VMs is increased to 25, which represents about 50\% of the required resources.
 
 Experiment 3 evaluates the influence of combining our horizontal clustering methods with vertical clustering (VC). We compare the performance gain under four scenarios: (\emph{i}) \emph{VC-prior}, VC is first performed and then HRB, HIFB, or HDB; (\emph{ii}) \emph{VC-posterior}, horizontal methods are performed first and then VC; (\emph{iii}) \emph{No-VC}, horizontal methods only; and (\emph{iv}) \emph{VC-only}, no horizontal methods. 
 %The motivation behind this experiment is that we believe VC will change imbalance metrics (HIFV, HDV and HRV) and we aim to show how these metrics can help us understand the performance of VC better. 
@@ -224,7 +224,7 @@ Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the ba
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=1.0\linewidth]{figures/evaluation/algorithm2.eps}
+	\includegraphics[width=1.0\linewidth]{figures/results/algorithms.eps}
 	\captionof{figure}{Experiment 1: performance gain ($\mu$) over a control execution for six algorithms (*~indicates the tuned performance of DFJS and AFJS).}
 	\label{fig:evaluation_algorithm}
 \end{figure}
@@ -278,19 +278,23 @@ Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the ba
 	\caption{Experiment 1: imbalance metrics.}
 	\label{tab:evaluation_montage}
 \end{table} 
-
+\note{Add information for SIPHT in the table.}
 
 
 \paragraph{\textbf{Experiment 2}} 
-Fig.~\ref{fig:evaluation_datasize} shows the performance gain of HIFB, HDB, HRB and HC for the LIGO Inspiral workflow. The reason we chose the LIGO Inspiral workflow is that it has most significant difference among these methods. It is clear that with the increase of average data size, HIFB performs better and better while HRB performs worse. We don't see much difference of HC and HDB while varying data size. The reason is HIFB is able to capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution only. Therefore, while the workflow is more data intensive, we observe better performance of HIFB and a worse performance of HRB. HC does not change much since it is randomly merges tasks at the same horizontal level without information about runtime or data dependency. HDB does not change much since its performance gain is already good enough. 
+Figure~\ref{fig:evaluation_datasize} shows the performance gain $\mu$ of HRB, HIFB, HDB, and HC over a control execution for the LIGO Inspiral workflow. We chose LIGO due to its significant performance difference among these methods. 
 
+It is clear that with the increase of average data size, HIFB performs better and better while HRB performs worse. We don't see much difference of HC and HDB while varying data size. The reason is HIFB is able to capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution only. Therefore, while the workflow is more data intensive, we observe better performance of HIFB and a worse performance of HRB. HC does not change much since it is randomly merges tasks at the same horizontal level without information about runtime or data dependency. HDB does not change much since its performance gain is already good enough. 
 
-\begin{figure*}[!htb]
+\begin{figure}[!htb]
 	\centering
-    \includegraphics[width=0.7\textwidth]{figures/evaluation/datasize2.eps}
-    \caption{Performance Gain over No Clustering with Different Data Size}
+    \includegraphics[width=\linewidth]{figures/results/datasize.eps}
+    \caption{Experiment 2: performance gain ($\mu$) over control a execution with different data sizes for the LIGO workflow.}
     \label{fig:evaluation_datasize}
-\end{figure*}
+\end{figure}
+
+
+
 
 \begin{figure}[!htb]
 	\centering
