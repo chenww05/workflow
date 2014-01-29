@@ -8,10 +8,10 @@ The experiments presented hereafter evaluate the performance of our balancing me
 \subsection{Scientific workflow applications}
 \label{sec:applications}
 
-Five real scientific workflow applications are used in the experiments: LIGO~\cite{LIGO} Inspiral analysis, Montage~\cite{Berriman2004}, CyberShake~\cite{Graves2010}, Epigenomics~\cite{Epigenome}, and SIPHT~\cite{SIPHT}. 
+Five real scientific workflow applications are used in the experiments: LIGO Inspiral analysis, Montage, CyberShake, Epigenomics, and SIPHT. 
 
 \paragraph{\textbf{LIGO}}
-The Laser Interferometer Gravitational Wave Observatory (LIGO) workflows are used to search for gravitational wave signatures in data collected by large-scale interferometers. The observatories' mission is to detect and measure gravitational waves predicted by general relativity ”€Einstein's theory of gravity €in which gravity is described as due to the curvature of the fabric of time and space. LIGO Inspiral workflow is a data intensive workflow. Figure~\ref{fig:evaluation_shape_ligo} shows a simplified version of the workflow.
+The Laser Interferometer Gravitational Wave Observatory (LIGO)~\cite{LIGO} workflows are used to search for gravitational wave signatures in data collected by large-scale interferometers. The observatories' mission is to detect and measure gravitational waves predicted by general relativity ”€Einstein's theory of gravity €in which gravity is described as due to the curvature of the fabric of time and space. LIGO Inspiral workflow is a data intensive workflow. Figure~\ref{fig:evaluation_shape_ligo} shows a simplified version of the workflow.
 
 \begin{figure}[!htb]
 	\centering
@@ -21,9 +21,7 @@ The Laser Interferometer Gravitational Wave Observatory (LIGO) workflows are use
 \end{figure}
 
 \paragraph{\textbf{Montage}}
-Montage is an astronomy application that is used to construct large image mosaics of the sky. Input images are reprojected onto a sphere and overlap is calculated for each input image. The application re-projects input images to the correct orientation while keeping background emission level constant in all images. The images are added by rectifying them into a common flux scale and background level. Finally the reprojected images are co- added into a final mosaic. The resulting mosaic image can provide a much deeper and detailed understanding of the portion of the sky in question. Figure~\ref{fig:evaluation_shape_montage} illustrates a small Montage workflow. The size of the workflow depends on the number of images used in constructing the desired mosaic of the sky. The structure of the workflow changes to accommodate increases in the number of inputs, which corresponds to an increase in the number of computational tasks.
-
-
+Montage~\cite{Berriman2004} is an astronomy application that is used to construct large image mosaics of the sky. Input images are reprojected onto a sphere and overlap is calculated for each input image. The application re-projects input images to the correct orientation while keeping background emission level constant in all images. The images are added by rectifying them into a common flux scale and background level. Finally the reprojected images are co- added into a final mosaic. The resulting mosaic image can provide a much deeper and detailed understanding of the portion of the sky in question. Figure~\ref{fig:evaluation_shape_montage} illustrates a small Montage workflow. The size of the workflow depends on the number of images used in constructing the desired mosaic of the sky. The structure of the workflow changes to accommodate increases in the number of inputs, which corresponds to an increase in the number of computational tasks.
 
 \begin{figure}[htb]
 	\centering
@@ -33,7 +31,7 @@ Montage is an astronomy application that is used to construct large image mosaic
 \end{figure}
 
 \paragraph{\textbf{Cybershake}}
-CyberShake is a seismology application that calculates Probabilistic Seismic Hazard curves for geographic sites in the Southern California region. It identifies all ruptures within 200km of the site of interest and convert rupture definition into multiple rupture variations with differing hypocenter locations and slip distributions. It then calculates synthetic seismograms for each rupture variance and peak intensity measures are then extracted from these synthetics and combined with the original rupture probabilities to produce probabilistic seismic hazard curves for the site. Figure~\ref{fig:evaluation_shape_cybershake} shows an illustration of the Cybershake workflow.
+CyberShake~\cite{Graves2010} is a seismology application that calculates Probabilistic Seismic Hazard curves for geographic sites in the Southern California region. It identifies all ruptures within 200km of the site of interest and convert rupture definition into multiple rupture variations with differing hypocenter locations and slip distributions. It then calculates synthetic seismograms for each rupture variance and peak intensity measures are then extracted from these synthetics and combined with the original rupture probabilities to produce probabilistic seismic hazard curves for the site. Figure~\ref{fig:evaluation_shape_cybershake} shows an illustration of the Cybershake workflow.
 
 \begin{figure}[htb]
 	\centering
@@ -43,7 +41,7 @@ CyberShake is a seismology application that calculates Probabilistic Seismic Haz
 \end{figure}
 
 \paragraph{\textbf{Epigenomics}}
-The Epigenomics workflow is a pipeline workflow. Initial data are acquired from the Illumina-Solexa Genetic Analyzer in the form of DNA sequence lanes. Each Solexa machine can generate multiple lanes of DNA sequences. These data are converted into a format that can be used by sequence mapping software. The mapping software can do one of two major tasks. It either maps short DNA reads from the sequence data onto a reference genome, or it takes all the short reads, treats them as small pieces in a puzzle and then tries to assemble an entire genome. In our experiments, the workflow maps DNA sequences to the correct locations in a reference Genome. This generates a map that displays the sequence density showing how many times a certain sequence expresses itself on a particular location on the reference genome. Scientists draw conclusions from the density of the acquired sequences on the reference genome. Epigenome is a CPU-intensive application and its simplified structure is shown on Figure~\ref{fig:evaluation_shape_genome}. 
+The Epigenomics workflow~\cite{Epigenome} is a pipeline workflow. Initial data are acquired from the Illumina-Solexa Genetic Analyzer in the form of DNA sequence lanes. Each Solexa machine can generate multiple lanes of DNA sequences. These data are converted into a format that can be used by sequence mapping software. The mapping software can do one of two major tasks. It either maps short DNA reads from the sequence data onto a reference genome, or it takes all the short reads, treats them as small pieces in a puzzle and then tries to assemble an entire genome. In our experiments, the workflow maps DNA sequences to the correct locations in a reference Genome. This generates a map that displays the sequence density showing how many times a certain sequence expresses itself on a particular location on the reference genome. Scientists draw conclusions from the density of the acquired sequences on the reference genome. Epigenome is a CPU-intensive application and its simplified structure is shown on Figure~\ref{fig:evaluation_shape_genome}. 
 
 \begin{figure}[htb]
 	\centering
@@ -53,7 +51,7 @@ The Epigenomics workflow is a pipeline workflow. Initial data are acquired from 
 \end{figure}
 
 \paragraph{\textbf{SIPHT}}
-The SIPHT workflow is conducting a wide search for small untranslated RNAs (sRNAs) that regulate several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using PEGASUS. These involve the prediction of Rho-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown on Figure~\ref{fig:evaluation_shape_sipht}. 
+The SIPHT workflow~\cite{SIPHT} is conducting a wide search for small untranslated RNAs (sRNAs) that regulate several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using PEGASUS. These involve the prediction of Rho-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown on Figure~\ref{fig:evaluation_shape_sipht}. 
 
 \begin{figure}[htb]
 	\centering
@@ -289,16 +287,16 @@ Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the ba
 		8 &1 & 0.000 & 0.00 & 0.00 \\
 		9 & 1 & 0.000 & 0.00 & 0.00 \\
 		\hline		
-		Level & \multicolumn{4}{c}{(d) \textbf{SIPHT}} \\
+		Level & \multicolumn{4}{c}{(e) \textbf{SIPHT}} \\
 		\hline
-		1 & 712 & 3.356 & 0.002 & 53199 \\
-		2 & 64 & 1.078 & 0.009 & 1196 \\
-		3 & 128 & 1.719 & 0.000 & 3013 \\
-		4 & 32 & 0.000 & 0.000 & 342 \\
-		5 & 32 & 0.210 & 0.000 & 228\\
-		6& 32 & 0.000 & 0.000 & 114\\
+		1 & 712 & 3.356 & 0.01 & 53199 \\
+		2 & 64 & 1.078 & 0.01 & 1196 \\
+		3 & 128 & 1.719 & 0.00 & 3013 \\
+		4 & 32 & 0.000 & 0.00 & 342 \\
+		5 & 32 & 0.210 & 0.00 & 228\\
+		6& 32 & 0.000 & 0.00 & 114\\
 	\end{tabular}
-	\caption{Experiment 1: imbalance metrics.}
+	\caption{Experiment 1: average number of tasks, and average values of imbalance metrics (HRV, HIFV, and HDV) for the 5 workflow applications.}
 	\label{tab:evaluation_montage}
 \end{table} 
 
@@ -333,37 +331,59 @@ Figures~\ref{fig:evaluation_resource_1} and~\ref{fig:evaluation_resource_2} show
 
 
 \paragraph{\textbf{Experiment 3}}
-Figure~\ref{fig:evaluation_vc_cybershake} shows the performance gain $\mu$ for the Cybershake workflow over a control execution when using vertical clustering (VC) combined to our balancing methods. Vertical clustering does not aggregate any improvement to the Cybershake workflow ($\mu$(\emph{VC-only}) $\approx 0.2\%$), because the workflow structure has no explicit pipeline. Similarly, the lack of pipelines in the SIPHT workflow produces the same results, due to  workflow structure.
+Figure~\ref{fig:evaluation_vc_cybershake} shows the performance gain $\mu$ for the Cybershake workflow over a control execution when using vertical clustering (VC) combined to our balancing methods. Vertical clustering does not aggregate any improvement to the Cybershake workflow ($\mu$(\emph{VC-only}) $\approx 0.2\%$), because the workflow structure has no explicit pipeline (see Figure~\ref{fig:evaluation_shape_cybershake}). Similarly, VC does not improve the SIPHT workflow due to the lack of pipelines on its structure (Figure~\ref{fig:evaluation_shape_sipht}). Thus, results for this workflow are omitted.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figures/results/vc_cybershake.eps}
 	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Cybershake workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_cybershake}
 \end{figure}
 
+Figure~\ref{fig:evaluation_vc_montage} shows the performance gain $\mu$ for the Montage workflow. In this workflow, vertical clustering is often performed on the two pipelines (Figure~\ref{fig:evaluation_shape_montage}). These pipelines are commonly single-task levels, thereby no horizontal clustering is performed on the pipelines. As a result, whether performing vertical clustering prior or after horizontal clustering, the result is about the same.
 
-
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
-    \includegraphics[width=1\linewidth]{figures/evaluation/vc_ligo2.eps}
-    \captionof{figure}{Performance Gain over No Clustering for Vertical Methods (LIGO)}
-    \label{fig:evaluation_vc_ligo}
-\end{figure}
-
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=1.0\linewidth]{figures/evaluation/vc_montage2.eps}
-	\captionof{figure}{Performance Gain over No Clustering for Vertical Methods (Montage)}
+	\includegraphics[width=1.0\linewidth]{figures/results/vc_montage.eps}
+	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Montage workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_montage}
 \end{figure}
 
-\begin{figure}[htb]
+The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:evaluation_vc_ligo}. Vertical clustering yields better performance gain when it is performed prior to horizontal clustering (\emph{VC-prior}). The LIGO workflow structure (Figure~\ref{fig:evaluation_shape_ligo}) has several pipelines that when primarily clustered vertically reduce system overheads (e.g. queuing and scheduling times). Furthermore, the runtime variance (HRV) of the clustered pipelines increases, thus the balancing methods, in particular HRB, evenly distribute task runtime among clustered jobs. When vertical clustering is performed \emph{a posteriori}, pipelines are broken due to the horizontally merging of tasks between pipelines neutralizing vertical clustering improvements.
+
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1.0\linewidth]{figures/evaluation/vc_genome2.eps}
-	\captionof{figure}{Performance Gain over No Clustering for Vertical Methods (Genome)}
+	\includegraphics[width=1.0\linewidth]{figures/results/vc_ligo.eps}
+	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the LIGO workflow over control execution when using vertical clustering (VC).}
+	\label{fig:evaluation_vc_ligo}
+\end{figure}
+
+%Table.~\ref{tab:evaluation_ligo_vc} shows the HRV after we perform VC on the LIGO Inspiral workflow. 
+%
+%\begin{table}[htb]
+%	\centering
+%	\small
+%	\begin{tabular}{lrrrrrrrr}
+%		\hline
+%		Level & Tasks & \multicolumn{2}{c}{HRV}   \\
+%		& & before VC & after VC \\
+%		\hline
+%		1,2 	& 191 	& 0.024 & 0.271  \\
+%		3 	& 18 		& 0.054 & 0.054 \\
+%		4,5 	& 191 	& 0.066 & 0.268 \\
+%		6 	& 18 		& 0.040 &  0.040 \\
+%		\hline
+%	\end{tabular}
+%	\caption{Imbalance Metrics (LIGO after performing VC)}
+%	\label{tab:evaluation_ligo_vc}
+%\end{table} 
+
+For the Epigenomics workflow as shown in Figure~\ref{fig:evaluation_vc_genome}, we observe similar phenomenon in HRB compared to the LIGO Inspiral workflow. As to the performance of HDB, VC-prior merges tasks at the second, third, fourth and fifth level together and thus HDB has less space to further improve the overall runtime. 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=1.0\linewidth]{figures/results/vc_genome.eps}
+	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Epigenomics workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_genome}
 \end{figure}
 
@@ -373,37 +393,11 @@ Figure~\ref{fig:evaluation_vc_cybershake} shows the performance gain $\mu$ for t
 
 
 
-%\begin{table}[htb]
-%\caption{Imbalance Metrics (LIGO after performing VC)}
-%\label{tab:evaluation_ligo_vc}
-%\centering
-%\begin{tabular}{lrrrrrrrr}
-%\hline
-%Level & Tasks & HRV   \\
-%
-%\hline
-%1,2 & 191 & 0.271  \\
-%3 & 18 & 0.054 \\
-%4,5 & 191 & 0.268 \\
-%6 & 18 &  0.04 \\
-%
-%\hline
-%\end{tabular}
-%\end{table} 
 
 
 %Fig.~\ref{fig:evaluation_wfsize} compares the performance gain of these algorithms by varying the workflow sizes (number of tasks in a workflow). By default, the LIGO Inspiral workflow in our paper has 800 tasks. With the decrease of workflow size, we can see that all of these methods perform worse. The reason is there is less resource contention with the decrease of workflow size and therefore task clustering does not perform well. The performance of HRB is more stable since the increase (or decrease) of workflow size has more significant impact on data transfer (roughly linear increase in runtime and square increase in data transfer). 
 
-
-
-For the LIGO Inspiral workflow as shown in Fig.~\ref{fig:evaluation_vc_ligo}, we can see that VC-prior perform better than other combination approaches. The reason is VC-prior increases HRV and allows horizontal methods to improve the performance further while VC-posterior does not have many tasks to merge since horizontal methods change the pipeline structures. Table.~\ref{tab:evaluation_ligo_vc} shows the HRV after we perform VC on the LIGO Inspiral workflow. 
-
-For the Montage workflow as shown in Fig.~\ref{fig:evaluation_vc_montage}, we do see significant improvement with VC (about 15\% more than the case without VC). However, the performance improvement does not distinguish these horizontal methods. The reason is tasks merges by VC (the middle and the tail levels of Montage as shown in Fig.\ref{fig:evaluation_shape_montage})are different from the one merged by horizontal methods (the first two levels in Fig.~\ref{fig:evaluation_shape_montage}). Therefore, the performance of VC-posterior and VC-prior does not differ from each other.  
-
-
-For the Epigenomics workflow as shown in Fig.~\ref{fig:evaluation_vc_genome}, we observe similar phenomenon in HRB compared to the LIGO Inspiral workflow. As to the performance of HDB, VC-prior merges tasks at the second, third, fourth and fifth level together and thus HDB has less space to further improve the overall runtime. 
-
-The SIPHT workflow as shown in Fig.~\ref{fig:evaluation_shape_sipht} does not have enough pipelines to perform vertical clustering and therefore we do not show its results of combining vertical clustering. 
+%The SIPHT workflow as shown in Fig.~\ref{fig:evaluation_shape_sipht} does not have enough pipelines to perform vertical clustering and therefore we do not show its results of combining vertical clustering. 
  
 %HIFB and HDB significantly increase the performance of the workflow execution. Both strategies capture the structural and runtime information, reducing data transfers between tasks, while HRB focuses on runtime distribution, which in this case is none. Fig.~\ref{fig:imbalance_performance} (bottom) shows the performance of the balancing methods for the Epigenomics workflow. When increasing the average data size, only HDB demonstrates significantly improvement related to HC. Investigating the structure of the Epigenomics workflow (Fig.~\ref{fig:imbalance_shape}-bottom), we can see that all tasks at the same horizontal level share the same IFs ($HIFV$ = 0), because each branch (surrounded by dash lines) happen to have the same amount of pipelines. Thus, HIFB has no performance improvement when compared to HC. However, for LIGO (Fig.~\ref{fig:imbalance_shape}-top), $HIFV \neq 0$, thus HIFB improves the workflow runtime performance.  
 %The intuition behind this difference between HDB and HIFB is that 
