@@ -8,7 +8,7 @@ The experiments presented hereafter evaluate the performance of our balancing me
 \subsection{Scientific workflow applications}
 \label{sec:applications}
 
-Five real scientific workflow applications are used in the experiments: LIGO Inspiral analysis, Montage, CyberShake, Epigenomics, and SIPHT. 
+Five real scientific workflow applications are used in the experiments: LIGO Inspiral analysis, Montage, CyberShake, Epigenomics, and SIPHT. In this subsection, we describe each workflow application and present their main characteristics and structures.
 
 \paragraph{\textbf{LIGO}}
 The Laser Interferometer Gravitational Wave Observatory (LIGO)~\cite{LIGO} workflows are used to search for gravitational wave signatures in data collected by large-scale interferometers. The observatories' mission is to detect and measure gravitational waves predicted by general relativity ”€Einstein's theory of gravity €in which gravity is described as due to the curvature of the fabric of time and space. LIGO Inspiral workflow is a data intensive workflow. Figure~\ref{fig:evaluation_shape_ligo} shows a simplified version of the workflow.
@@ -87,22 +87,22 @@ Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows cha
 % Task clustering techniques
 \subsection{Task clustering techniques}
 
-In the experiments, we compare the performance of our methods to the Horizontal Clustering (HC)~\cite{Singh:2008:WTC:1341811.1341822} technique, which is widely used by Pegasus, and with two methods from the literature, DFJS~\cite{Muthuvelu:2005:DJG:1082290.1082297} and AFJS~\cite{Liu2009}.
+In the experiments, we compare the performance of our balancing methods to the Horizontal Clustering (HC)~\cite{Singh:2008:WTC:1341811.1341822} technique, and with two methods well known from the literature, DFJS~\cite{Muthuvelu:2005:DJG:1082290.1082297} and AFJS~\cite{Liu2009}. In this subsection, we briefly describe each of these algorithms.
+
 
 \paragraph{\textbf{HC}}
+Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal level of the workflow. The clustering granularity (number of tasks within a cluster) of a clustered job is controlled by the user, who defines either the number of tasks per clustered job (\emph{clusters.size}), or the number of clustered jobs per horizontal level of the workflow (\emph{clusters.num}). This algorithm has been implemented and used in Pegasus WMS~\cite{Singh:2008:WTC:1341811.1341822}. For simplicity, we define \emph{clusters.num} as the number of available resources. In our prior work~\cite{6683907}, we have compared the runtime performance of defining different clustering granularity. The pseudo-code of the HC technique is shown in Algorithm~\ref{alg:evaluation_hc}. 
 
-Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal level of the workflow. The clustering granularity of a clustered job is controlled by the user by specifying either the number of tasks need to be merged into a single clustered job (clusters.size) or the number of jobs per horizontal level of the workflow (clusters.num). This algorithm has been implemented and used in Pegasus WMS~\cite{Singh:2008:WTC:1341811.1341822}. For simplicity, we set the clusters.num to be the same as the number of all VMs. In our prior work~\cite{6683907}, we have compared the runtime performance of setting different clustering granularity. Algorithm~\ref{alg:evaluation_hc} shows the pseudo-code of HC. 
 
-
-\begin{algorithm}[htb]
-	\caption{ Horizontal Clustering algorithm}
+\begin{algorithm}[!htb]
 	\footnotesize
+	\caption{Horizontal Clustering algorithm.}
 	\label{alg:evaluation_hc}
 	\begin{algorithmic}[1]
-		\Require $W$: workflow; $C$: the required number of tasks per job determined by clusters.size or clusters.num
+		\Require $W$: workflow; $C$: max number of tasks per job defined by \emph{clusters.size} or \emph{clusters.num}
 		\Procedure{Clustering}{$W,C$}
-			\For{$level < $the depth of $W$}
-				\State $TL\gets $\ \Call{GetTasksAtLevel}{$w,level$} \Comment{Partition $W$ based on depth}
+			\For{$level < depth(W)$}
+				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
 				\State $CL\gets$  \ \Call{Merge}{$TL,C$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
@@ -120,17 +120,17 @@ Horizontal Clustering (HC) merges multiple tasks that are at the same horizontal
 \end{algorithm}
 
 \paragraph{\textbf{DFJS}}
-The dynamic fine-grained job scheduler (DFJS) is developed by Muthuvelu et al. ~\cite{Muthuvelu:2005:DJG:1082290.1082297}, which groups tasks based on their runtime based on the maximum runtime specified for a clustered job. The algorithm adds a task to a clustered job until the runtime of this job exceeds the maximum runtime. Algorithm~\ref{alg:evaluation_dfjs} shows the pseudo-code of DFJS. 
+The dynamic fine-grained job scheduler (DFJS) was proposed by Muthuvelu et al.~\cite{Muthuvelu:2005:DJG:1082290.1082297}. The algorithm groups bag of tasks based on their granularity size---defined as the processing time of the task on the resource. Resources are ordered by their decreasing values of capacity (in MIPS), and tasks are grouped up to the resource capacity. This process continues until all tasks are grouped and assigned to resources. Algorithm~\ref{alg:evaluation_dfjs} shows the pseudo-code of the heuristic. 
  
-\begin{algorithm}[htb]
-	\caption{ DFJS algorithm}
+\begin{algorithm}[!htb]
+	\caption{ DFJS algorithm.}
 	\footnotesize
 	\label{alg:evaluation_dfjs}
 	\begin{algorithmic}[1]
-		\Require $W$: workflow; $max.runtime$: the maximum runtime for a clustered jobs 
+		\Require $W$: workflow; $max.runtime$: max runtime of clustered jobs 
 		\Procedure{Clustering}{$W,max.runtime$}
 			\For{$level < $the depth of $W$}
-				\State $TL\gets $\ \Call{GetTasksAtLevel}{$w,level$} \Comment{Partition $W$ based on depth}
+				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
 				\State $CL\gets$  \ \Call{Merge}{$TL,max.runtime$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
@@ -153,17 +153,17 @@ The dynamic fine-grained job scheduler (DFJS) is developed by Muthuvelu et al. ~
 
 
 \paragraph{\textbf{AFJS}}
-The adaptive fine-grained job scheduler (AFJS)~\cite{Liu2009} is an extension of DFJS. It groups tasks not only based on the maximum runtime but also the maximum data size specified for a clustered job. The algorithm adds a task to a clustered job until the job's runtime exceeds the maximum runtime or its data size of it exceeds the maximum data size. Algorithm~\ref{alg:evaluation_afjs} shows the pseudo-code of AFJS. 
+The adaptive fine-grained job scheduler (AFJS)~\cite{Liu2009} is an extension of DFJS. It groups tasks not only based on the maximum runtime defined per cluster job, but also on the cumulated data size per clustered job. The algorithm adds tasks to a clustered job until the job's runtime does not trespass the cumulated runtime or the cumulated data size thresholds. The AFJS heuristic pseudo-code is shown in Algorithm~\ref{alg:evaluation_afjs}. 
 
-\begin{algorithm}[htb]
-	\caption{ AFJS algorithm}
+\begin{algorithm}[!htb]
+	\caption{ AFJS algorithm.}
 	\footnotesize
 	\label{alg:evaluation_afjs}
 	\begin{algorithmic}[1]
 		\Require $W$: workflow; $max.runtime$: the maximum runtime for a clustered jobs; $max.datasize$: the maximum data size for a clustered job
 		\Procedure{Clustering}{$W,max.runtime$}
 			\For{$level < $the depth of $W$}
-				\State $TL\gets $\ \Call{GetTasksAtLevel}{$w,level$} \Comment{Partition $W$ based on depth}
+				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
 				\State $CL\gets$  \ \Call{Merge}{$TL,max.runtime, max.datasize$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
@@ -184,23 +184,20 @@ The adaptive fine-grained job scheduler (AFJS)~\cite{Liu2009} is an extension of
 	\end{algorithmic}
 \end{algorithm}
 
-DFJS and AFJS require parameter tuning (e.g. maximum runtime) to efficiently cluster tasks into coarse-grained jobs. For instance, if the maximum runtime is too high, all tasks may be grouped together, leading to loss of parallelism. In contrast, if the maximum runtime is too low, the algorithms do not group tasks, leading to no improvement over a control execution. For the comparison purposes of this work, we perform a parameter sweep study in order to optimize the algorithms for each workflow application described in Section~\ref{sec:applications}. However, explore all possible parameter combinations is a cumbersome and exhaustive task. Instead, we performed Binary Search...
+DFJS and AFJS require parameter tuning (e.g. maximum cumulated runtime per clustered job) to efficiently cluster tasks into coarse-grained jobs. For instance, if the maximum runtime is too high, all tasks may be grouped into a single job, leading to loss of parallelism. In contrast, if the runtime threshold is too low, the algorithms do not group tasks, leading to no improvement over a control execution. 
 
-The original DFJS and AFJS choose these parameters empirically, however, which requires a lot of prior knowledge about workflows. In our case, we first estimate the upper bound of max.runtime ($n$) to be the sum of all the task runtimes and the lower bound of max.runtime ($m$) to be 1 second for simplicity. We then divide all the data points in to ten chunks and sample one data point from each chunk. Then we choose the chunk that has the lowest makespan and set the new $n$ and $m$ to be the range of the selected chunk. We repeat these steps until it converges. We do not provide a mathematical proof of its correctness since it is not our focus. Instead we show the relationship between the makespan and the max.runtime for an example Montage workflow in Fig~\ref{fig:evaluation_dfjs_montage} (the experiment conditions will be discussed in Section~\ref{sec:experiment_conditions}). From the figure, we know that even though there are multiple local minimal makespan, these data points are quite close to each other and the difference between their values (about seconds) is negligible. As a rough estimation of the minimal makespan, our approach is acceptable. 
+For the comparison purposes of this work, we perform a parameter study in order to tune the algorithms for each workflow application described in Section~\ref{sec:applications}. Explore all possible parameter combinations is a cumbersome and exhaustive task. In the original DFJS and AFJS works, these parameters are empirically chosen, however this approach requires deep knowledge about the workflow applications. Instead, we performed a parameter tuning study, where we first estimate the upper bound of \emph{max.runtime} ($n$) as the sum of all task runtimes, and the lower bound of \emph{max.runtime} ($m$) as 1 second for simplicity. Data points are divided into ten chunks and sample one data point from each chunk. We then select the chunk that has the lowest makespan and set $n$ and $m$ as the upper and lower bounds of the selected chunk, respectively. These steps are repeated until $n$ and $m$ have converged into a data point.
 
+We do not provide a mathematical proof of the correctness of our method, since we are not focused on demonstrate the optimal tuning for DFJS and AFJS algorithms, but a rough estimation of the minimal makespan. Instead, we show the relationship between the makespan and the \emph{max.runtime} for an example Montage workflow application (Figure~\ref{fig:evaluation_dfjs_montage})---experiment conditions are presented in Section~\ref{sec:experiment_conditions}. Data points are divided into 10 chunks of 250s each. As the lower makespan values belongs to the first chunk, $n$ is updated to 250, and $m$ to 0. The process repeats until the convergence around 240s. Even though there are multiple local minimal makespan values, these data points are nearly close to each other, and the difference between their values (about seconds) is negligible.
 
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1.0\linewidth]{figures/evaluation/max_runtime_montage.pdf}
-	\captionof{figure}{The relationship between the makespan of workflow and the specified maximum runtime in DFJS (Montage).}
+	\includegraphics[width=.9\linewidth]{figures/evaluation/max_runtime_montage.pdf}
+	\captionof{figure}{Relationship between the makespan of workflow and the specified maximum runtime in DFJS (Montage).}
 	\label{fig:evaluation_dfjs_montage}
 \end{figure}
 
-
-For simplicity, we use DFJS* and AFJS* to indicate their best estimated performance in the rest of this work.
-
-%In practice, these algorithms are not feasible to use since parameter tuning requires a lot of prior knowledge and it takes much time to search the parameter space without proper heuristics. . 
+For simplicity, in the rest of this work we use DFJS* and AFJS* to indicate the best estimated performance of DFJS and AFJS respectively.
 
 
 % Experiment conditions
