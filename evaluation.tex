@@ -51,7 +51,7 @@ The Epigenomics workflow~\cite{Epigenome} is a pipeline workflow. Initial data a
 \end{figure}
 
 \paragraph{\textbf{SIPHT}}
-The SIPHT workflow~\cite{SIPHT} is conducting a wide search for small untranslated RNAs (sRNAs) that regulate several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using PEGASUS. These involve the prediction of Rho-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown on Figure~\ref{fig:evaluation_shape_sipht}. 
+The SIPHT workflow~\cite{SIPHT} conducts a wide search for small untranslated RNAs (sRNAs) that regulates several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using Pegasus WMS. These involve the prediction of $\rho$-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown on Figure~\ref{fig:evaluation_shape_sipht}. 
 
 \begin{figure}[htb]
 	\centering
@@ -62,7 +62,7 @@ The SIPHT workflow~\cite{SIPHT} is conducting a wide search for small untranslat
 
 Table~\ref{tab:evaluation_workflows} shows the summary of the main workflows characteristics: number of tasks, average data size, and average task runtimes. 
 
-\begin{table}
+\begin{table}[!htb]
 	\setlength{\tabcolsep}{11pt}
 	\centering
 	\small
@@ -378,7 +378,8 @@ The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:eva
 %	\label{tab:evaluation_ligo_vc}
 %\end{table} 
 
-For the Epigenomics workflow as shown in Figure~\ref{fig:evaluation_vc_genome}, we observe similar phenomenon in HRB compared to the LIGO Inspiral workflow. As to the performance of HDB, VC-prior merges tasks at the second, third, fourth and fifth level together and thus HDB has less space to further improve the overall runtime. 
+Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigenomics workflow (see Figure~\ref{fig:evaluation_vc_genome}) are better when VC is performed \emph{a priori}. This is due to several pipelines inherent to the workflow structure (Figure~\ref{fig:evaluation_shape_genome}). However, vertical clustering has poorer performance if it is performed prior to the HDB algorithm.
+\note{Explain why for HDB, VC-prior is worse than VC-posterior.}
 
 \begin{figure}[!htb]
 	\centering
@@ -393,7 +394,7 @@ For the Epigenomics workflow as shown in Figure~\ref{fig:evaluation_vc_genome}, 
 
 
 
-
+%For the Epigenomics workflow as shown in Figure~\ref{fig:evaluation_vc_genome}, we observe similar phenomenon in HRB compared to the LIGO Inspiral workflow. As to the performance of HDB, VC-prior merges tasks at the second, third, fourth and fifth level together and thus HDB has less space to further improve the overall runtime. 
 
 %Fig.~\ref{fig:evaluation_wfsize} compares the performance gain of these algorithms by varying the workflow sizes (number of tasks in a workflow). By default, the LIGO Inspiral workflow in our paper has 800 tasks. With the decrease of workflow size, we can see that all of these methods perform worse. The reason is there is less resource contention with the decrease of workflow size and therefore task clustering does not perform well. The performance of HRB is more stable since the increase (or decrease) of workflow size has more significant impact on data transfer (roughly linear increase in runtime and square increase in data transfer). 
 
