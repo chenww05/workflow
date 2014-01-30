@@ -7,7 +7,7 @@ In this section, we introduce metrics that quantitatively capture workflow chara
 
 \subsection{Imbalance Metrics}
 
-\textbf{Runtime Imbalance} describes the difference of the task/job runtime of a group of tasks/jobs. In this work, we denote the \textbf{Horizontal Runtime Variance} ($HRV$) as the ratio of the standard deviation in task runtime to the average runtime of tasks/jobs at the same horizontal level of a workflow. At the same horizontal level, the job with the longest runtime often controls the release of the next level jobs. A high $HRV$ value means that the release of next level jobs has been delayed.
+\textbf{Runtime Imbalance} describes the difference of the task/job runtime of a group of tasks/jobs. In this work, we denote the \textbf{Horizontal Runtime Variance} ($HRV$) as the standard deviation in task runtime at the same horizontal level of a workflow. At the same horizontal level, the job with the longest runtime often controls the release of the next level jobs. A high $HRV$ value means that the release of next level jobs has been delayed.
 Therefore, to improve runtime performance, it is meaningful to reduce the standard deviation of job runtime. Figure~\ref{fig:imbalance_rv} shows an example of four independent tasks $t_1$, $t_2$, $t_3$ and $t_4$ where the task runtime of $t_1$ and $t_2$ is 10 seconds and the task runtime of $t_3$ and $t_4$ is 30 seconds. In the Horizontal Clustering (HC) approach, a possible clustering result could be merging $t_1$ and $t_2$ into a clustered job and $t_3$ and $t_4$ into another. This approach results in imbalanced runtime, i.e., $HRV > 0$ (Figure~\ref{fig:imbalance_rv}-top). In contrast, a balanced clustering strategy should try its best to evenly distribute task runtime among jobs as shown in Figure~\ref{fig:imbalance_rv} (bottom). A smaller \emph{HRV} means that the runtime of tasks within a horizontal level is more evenly distributed and therefore it is less necessary to balance the runtime distribution. However, runtime variance is not able to describe how regular is the structure of the dependencies between tasks.
 
 \begin{figure}[htb]
@@ -150,11 +150,11 @@ In HRB, candidate jobs are sorted by their runtime, while in HIFB jobs are first
 
 However, HIFB is suitable for workflows with asymmetric structure. For symmetric workflows, such as the one shown in Figure~\ref{fig:imbalance_hrb}, the $IF$ value for all tasks from the first level will be the same (e.g. $IF=0.25$), thus the method may also cause dependency imbalance. HDB jobs are sorted based on the distance between them and the targeted task $t$, then on their runtimes. For instance, in Figure~\ref{fig:imbalance_hdb}, the distances between tasks $D(t_1,t_2)=D(t_3,t_4)=2$, while $D(t_1,t_3)=D(t_1,t_4)=D(t_2,t_3)=D(t_2,t_4)=4$. Thus, HDB merges a list of candidate tasks with the minimal distance ($t_1$ and $t_2$, and $t_3$ and $t_4$). Note that even if the workflow is asymmetric (Figure~\ref{fig:imbalance_hifb}), HDB would obtain the same result as in HIFB. 
 
-In some rare cases, HDB would perform worst than HIFB. Figure~\ref{fig:imbalance_hifb_hdb} shows a case when merging $t_1, t_2, t_3, t_4, t_5$, HDB does not tell the difference between them since the distances between each pair of them are all 2. However, HIFB does distinguish them since their impact factors are quite different. This example exists in some of the LIGO workflow which we will discuss its details in Section.~\ref{sec:results}. 
+In some rare cases, HDB would perform worst than HIFB. Figure~\ref{fig:imbalance_hifb_hdb} shows a case when merging $t_1, t_2, t_3, t_4, t_5$, HDB does not tell the difference between $t_3, t_4, t_5$ since the distances between each pair of them are all 2. However, HIFB does distinguish these tasks since their impact factors are quite different. This example exists in some of the LIGO workflows, which we will discuss its details in Section.~\ref{sec:results}. 
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.85\linewidth]{figures/imbalance/hifb_vs_hdb.pdf}
+	\includegraphics[width=1.0\linewidth]{figures/imbalance/hifb_vs_hdb.pdf}
 	\captionof{figure}{An example when HDB does not distinguish tasks while HIFB does}
 	\label{fig:imbalance_hifb_hdb}
 \end{figure}
