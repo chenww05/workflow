@@ -131,7 +131,7 @@ For simplicity, system overheads are not displayed.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.85\linewidth]{figures/imbalance/hrb.pdf}
-	\caption{An example of the HRB method. By solely addressing runtime variance, data locality problems may arise.}
+	\caption{An example of the HRB (Horizontal Runtime Balancing) method. By solely addressing runtime variance, data locality problems may arise.}
 	\label{fig:imbalance_hrb}
 \end{figure}
 
@@ -142,7 +142,7 @@ In HRB, candidate jobs are sorted by their runtime, while in HIFB jobs are first
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth]{figures/imbalance/hifb.pdf}
-	\captionof{figure}{An example of the HIFB method. Task impact factors allow the detection of similarities between tasks.}
+	\captionof{figure}{An example of the HIFB (Horizontal Impact Factor Balancing) method. Task impact factors allow the detection of similarities between tasks.}
 	\label{fig:imbalance_hifb}
 \end{figure}
 
@@ -151,7 +151,7 @@ However, HIFB is suitable for workflows with asymmetric structure. For symmetric
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.85\linewidth]{figures/imbalance/hdb.pdf}
-	\captionof{figure}{An example of the HDB method. Measuring the distances between tasks avoid data locality problems.}
+	\captionof{figure}{An example of the HDB (Horizontal Distance Balancing) method. Measuring the distances between tasks avoid data locality problems.}
 	\label{fig:imbalance_hdb}
 \end{figure}
 
@@ -220,14 +220,16 @@ In this method, vertical clustering is performed \emph{a priori}, and then the b
 \end{figure}
 
 \paragraph{\textbf{VC-posterior}} 
-Here, vertical clustering is performed \emph{a posteriori}, i.e. balancing methods are first applied, and then VC. Figure~\ref{fig:imbalance_vc_posterior} shows an example where tasks are horizontally clustered first based on the runtime variance, and then merged vertically. In this example, vertical clustering targeted the data locality problem by merging tasks that would not generate interdependency once clustered. However, this approach causes a runtime imbalance problem.
+%Here, vertical clustering is performed \emph{a posteriori}, i.e. balancing methods are first applied, and then VC. Figure~\ref{fig:imbalance_vc_posterior} shows an example where tasks are horizontally clustered first based on the runtime variance, and then merged vertically. In this example, vertical clustering targeted the data locality problem by merging tasks that would not generate interdependency once clustered. However, this approach causes a runtime imbalance problem.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.85\linewidth]{figures/imbalance/vertical_clustering_posterior.pdf}
+	\includegraphics[width=0.85\linewidth]{figures/imbalance/vertical_clustering_posterior3.pdf}
 	\captionof{figure}{\emph{VC-posterior}: horizontal clustering (balancing methods) is performed first, and then vertical clustering.}
 	\label{fig:imbalance_vc_posterior}
 \end{figure}
+
+Here, vertical clustering is performed \emph{a posteriori}, i.e. balancing methods are first applied, and then VC. Figure~\ref{fig:imbalance_vc_posterior} shows an example where tasks are horizontally clustered first based on the runtime variance, and then merged vertically. However, since the original pipeline structures have been broken by horizontal clustering, VC does not perform any changes to the workflow. 
 
 
 %means we perform horizontal clustering methods first and then vertical clustering. For the same workflow, assuming we merge tasks horizontally as shown in , we can see that we cannot perform vertical clustering to clustered jobs at the fourth level and the fifth level since the original pipeline structures have been destroyed by horizontal clustering. This phenomenon suggests us VC-posterior may work better compared to VC-prior, generally speaking. However, some opposite cases do exist. We will verify our hypothesis in Section~\ref{sec:results}. We will also compared the two combining approaches with \textbf{VC-only}, which means we perform vertical clustering only and \textbf{No-VC}, which means we just perform horizontal clustering methods without vertical clustering. 
