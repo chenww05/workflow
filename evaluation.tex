@@ -238,7 +238,7 @@ Figure~\ref{fig:evaluation_algorithm} shows the performance gain $\mu$ of the ba
 	\label{fig:evaluation_algorithm}
 \end{figure}
 
-\begin{table}[htb]
+\begin{table}[!htb]
 	\setlength{\tabcolsep}{12pt}
 	\centering
 	\small
@@ -348,38 +348,12 @@ Figure~\ref{fig:evaluation_vc_montage} shows the performance gain $\mu$ for the 
 	\label{fig:evaluation_vc_montage}
 \end{figure}
 
-The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:evaluation_vc_ligo}. Vertical clustering yields better performance gain when it is performed prior to horizontal clustering (\emph{VC-prior}). The LIGO workflow structure (Figure~\ref{fig:evaluation_shape_ligo}) has several pipelines that when primarily clustered vertically reduce system overheads (e.g. queuing and scheduling times). Furthermore, the runtime variance (HRV) of the clustered pipelines increases, thus the balancing methods, in particular HRB, evenly distribute task runtime among clustered jobs. When vertical clustering is performed \emph{a posteriori}, pipelines are broken due to the horizontally merging of tasks between pipelines neutralizing vertical clustering improvements.
-
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figures/results/vc_ligo.eps}
 	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the LIGO workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_ligo}
 \end{figure}
-
-%Table.~\ref{tab:evaluation_ligo_vc} shows the HRV after we perform VC on the LIGO Inspiral workflow. 
-%
-%\begin{table}[htb]
-%	\centering
-%	\small
-%	\begin{tabular}{lrrrrrrrr}
-%		\hline
-%		Level & Tasks & \multicolumn{2}{c}{HRV}   \\
-%		& & before VC & after VC \\
-%		\hline
-%		1,2 	& 191 	& 0.024 & 0.271  \\
-%		3 	& 18 		& 0.054 & 0.054 \\
-%		4,5 	& 191 	& 0.066 & 0.268 \\
-%		6 	& 18 		& 0.040 &  0.040 \\
-%		\hline
-%	\end{tabular}
-%	\caption{Imbalance Metrics (LIGO after performing VC)}
-%	\label{tab:evaluation_ligo_vc}
-%\end{table} 
-
-Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigenomics workflow (see Figure~\ref{fig:evaluation_vc_genome}) are better when VC is performed \emph{a priori}. This is due to several pipelines inherent to the workflow structure (Figure~\ref{fig:evaluation_shape_genome}). However, vertical clustering has poorer performance if it is performed prior to the HDB algorithm. The reason is the average task runtime of Epigenomics is much larger than other workflows as shown in Table.~\ref{tab:evaluation_workflows}. Therefore, VC-prior generates very large clustered jobs vertically and makes it difficult to horizontal methods to improve further. 
-\note{not sure whether it is right}
-
 
 
 \begin{figure}[!htb]
@@ -388,6 +362,15 @@ Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigen
 	\captionof{figure}{Experiment 3: performance gain ($\mu$) for the Epigenomics workflow over control execution when using vertical clustering (VC).}
 	\label{fig:evaluation_vc_genome}
 \end{figure}
+
+The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:evaluation_vc_ligo}. Vertical clustering yields better performance gain when it is performed prior to horizontal clustering (\emph{VC-prior}). The LIGO workflow structure (Figure~\ref{fig:evaluation_shape_ligo}) has several pipelines that when primarily clustered vertically reduce system overheads (e.g. queuing and scheduling times). Furthermore, the runtime variance (HRV) of the clustered pipelines increases, thus the balancing methods, in particular HRB, evenly distribute task runtime among clustered jobs. When vertical clustering is performed \emph{a posteriori}, pipelines are broken due to the horizontally merging of tasks between pipelines neutralizing vertical clustering improvements.
+
+
+
+
+
+Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigenomics workflow (see Figure~\ref{fig:evaluation_vc_genome}) are better when VC is performed \emph{a priori}. This is due to several pipelines inherent to the workflow structure (Figure~\ref{fig:evaluation_shape_genome}). However, vertical clustering has poorer performance if it is performed prior to the HDB algorithm. The reason is the average task runtime of Epigenomics is much larger than other workflows as shown in Table.~\ref{tab:evaluation_workflows}. Therefore, VC-prior generates very large clustered jobs vertically and makes it difficult to horizontal methods to improve further. 
+
 
 
 

@@ -1,0 +1,12 @@
+\section{Conclusion and Future Work}
+
+We presented three balancing methods and two vertical clustering combination approaches to address the load balance problem when clustering workﬂow tasks. We deﬁned three imbalance metrics to quantitatively measure workﬂow characteristics based on task runtime variation (HRV), task impact factor (HIFV), and task distance variance (HDV).
+
+Three experiment sets were conducted using five real workflow traces. The first experiment showed the performance gain over a control execution that has no clustering. Our clustering techniques are comparable (and in some cases much better than) to three existing algorithms. The second experiment showed the influence of average data size and number of VMs on the performance gain. Particularly, it showed that the three clustering algorithms have different sensitivity to data intensive workflows and computation intensive workflows. The last experiment showed the performance gain of combining 
+
+In the future, we are going to further analyze the imbalance metrics proposed. For example, the values of these metrics presented in this paper are not normalized and thus their values per level (HIFV, HDV and HRV) are in different scales. Also, we are going to analyze more workflow examples, particularly the ones with asymmetric workflow structures, to illustrate the relationship between workflow structures and the metric values. 
+
+As shown in this paper, the three balancing algorithms and the two vertical clustering combination approaches have different sensitivity to workflows with different graph structures and runtime distribution. Another future work is portfolio scheduling, which chooses multiple scheduling algorithms initially and selects dynamically a suitable algorithm from them according to the dynamic load. 
+
+\section{Acknowledgements}
+This work is funded by NSF IIS-0905032 and NSF FutureGrid 0910812. We thank Gideon Juve, Karan Vahi, Rajiv Mayani and Mats Rynge for their help. 
