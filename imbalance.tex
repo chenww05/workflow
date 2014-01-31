@@ -133,7 +133,7 @@ For simplicity, system overheads are not displayed.
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.85\linewidth]{figures/imbalance/hrb.pdf}
-	\caption{An example of the HRB method. By solely addressing runtime variance, data locality problems may arise.}
+	\caption{An example of the HRB (Horizontal Runtime Balancing) method. By solely addressing runtime variance, data locality problems may arise.}
 	\label{fig:imbalance_hrb}
 \end{figure}
 
@@ -144,7 +144,7 @@ In HRB, candidate jobs are sorted by their runtime, while in HIFB jobs are first
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth]{figures/imbalance/hifb.pdf}
-	\captionof{figure}{An example of the HIFB method. Task impact factors allow the detection of similarities between tasks.}
+	\captionof{figure}{An example of the HIFB (Horizontal Impact Factor Balancing) method. Task impact factors allow the detection of similarities between tasks.}
 	\label{fig:imbalance_hifb}
 \end{figure}
 
@@ -153,7 +153,7 @@ However, HIFB is suitable for workflows with asymmetric structure. For symmetric
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.85\linewidth]{figures/imbalance/hdb.pdf}
-	\captionof{figure}{An example of the HDB method. Measuring the distances between tasks avoid data locality problems.}
+	\captionof{figure}{An example of the HDB (Horizontal Distance Balancing) method. Measuring the distances between tasks avoid data locality problems.}
 	\label{fig:imbalance_hdb}
 \end{figure}
 
