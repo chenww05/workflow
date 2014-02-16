@@ -1,0 +1,27 @@
+\documentclass[a4]{letter}
+\usepackage{graphicx}
+\usepackage{color}
+\address{Weiwei Chen\\ 4676 Admiralty Way, Suite 1001,\\ 90292, Marina del Rey, CA, USA.}
+\signature{Weiwei Chen, }
+\date{February 12th, 2014}
+
+\usepackage{hyperref}
+
+\newcommand{\revised}[1]{\color{blue} #1\color{black}}
+
+\begin{document}
+
+\begin{letter}{}
+
+\opening{Dear Editor and Reviewers,}
+
+I am writing this letter to come with our paper ``Imbalance Optimization and Task Clustering in Scientific Worfklows'' submitted to Future Generation Computer Systems (FGCS). This paper describes quantitative metrics and balance methods to assess and cope with runtime and dependency imbalance in task clustering when executing scientific workflows on distributed platforms. As explained in the Introduction, these metrics and methods were presented in a paper at the latest IEEE International Conference on e-Science (e-Science 2013). In the FGCS version, we complement the presentation of these methods, and more importantly, we study (\emph{i}) the performance gain of using our balancing methods over a baseline execution on a larger set of workflows; (\emph{ii}) the performance gain over two additional legacy task clustering methods from the literature; (\emph{iii}) the performance impact of the variation of the average data size and number of resources; and (\emph{iv}) the performance impact of combining our balancing methods with vertical clustering. This study is based on a complete new set of experiments and results. We believe that such study makes a real added value to this FGCS version compared to the e-Science paper.
+
+\closing{Sincerely yours,}
+
+%\vspace{1cm}
+
+%Rafael Ferreira da Silva\\ Tristan Glatard\\ Fr\'ed\'eric Desprez
+
+\end{letter}
+\end{document}
