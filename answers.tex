@@ -63,7 +63,7 @@ There are some places where article requires reorganization: e.g. description of
 There is a gap in all proposed algorithms (No. 1,2,3). Authors introduce two input parameters that control algorithms: First, C - maximum allowed number of tasks per job and second R - maximum allowed number of jobs per horizontal level of the directed acyclic graph of  the workflow. In the case of mismatched values of C and R (e.g. too small values of both parameters in relation to number of tasks at some level of the workflow DAG) algorithm would miss some tasks. For comparison, algorithms cited from literature (4,5,6) do not have this problem.
 \end{review}
 
-\answer{\todo{Weiwei could you answer that?}}
+\answer{In practice, either C or R will be set and we get the other parameter by following C$\times$R = the total number of tasks in a level. Usually we would set the R to be one or two times of the number of available VMs and our prior work[16] has evaluated the performance with different graunlarity. We perform task clustering in a level by level approach and thus the pair of C and R are calculated in level. We fixed the description of the three algorithms. }
 
 
 % Reviewer 2
@@ -127,7 +127,7 @@ The number of single core VMs = 20 is disappointing in a load imbalance evaluati
 The results are all shown as performance gains over the baseline. The balancing ``accuracy'' was not evaluated. For example, idleness in processing nodes is typically measured when evaluating load balancing techniques. It is important to know the precision of the imbalance prediction, since there are so many execution situations that may incur in imbalance (CPU performance, IO operations, data skew like non-uniform selectivity or similarity in specific values). For example, some load balancing systems (e.g. Falkon) show limitations of load balancing under failures or when facing unpredictable task execution times. What is the overhead for imbalance prediction ? It seems that the algorithms already have a task performance value distribution before the execution and this sampling/prediction time was not considered while comparing with baseline.
 \end{review}
 
-\answer{\todo{Wewei, could you answer that?}}
+\answer{The focus of this work is not to address the main imbalance issues during parallel scientific workflow execution. Instead, we focus on developing imbalance metrics to improve the perforamnce of task clustering (in terms of the overall runtime) in a way that the task groups are more balanced (e.g. runtime or data dependency), and thus system overheads such as queuing time and data transfer are reduced. The title of the manuscript has been changed to ``Using Imbalance Metrics to Optimize Task Clustering in Scientific Workflow Executions'' to better reflect the focus of our work. Also, we changed some sentences in the introduction to highlight our main focus and contributions.}
 
 
 

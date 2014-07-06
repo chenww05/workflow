@@ -134,10 +134,11 @@ In this subsection, we introduce our balanced clustering methods used to improve
 	\caption{Horizontal Runtime Balancing algorithm.}
 	\label{alg:imbalance_hrb}
 	\begin{algorithmic}[1]
-		\Require $W$: workflow; $C$: number of tasks per jobs; $R$: number of jobs per horizontal level
-		\Procedure{Clustering}{$W,C$}
+		\Require $W$: workflow; $R$: number of jobs per horizontal level
+		\Procedure{Clustering}{$W,R$}
 			\For{$level < depth(W)$}
 				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
+				\State $C \gets TL.size() / R$ \Comment{$C$ is number of tasks per job in this level}
 				\State $CL\gets$  \ \Call{Merge}{$TL,C, R$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
@@ -178,10 +179,11 @@ For simplicity, system overheads are not displayed.
 	\caption{Horizontal Impact Factor Balancing algorithm.}
 	\label{alg:imbalance_hifb}
 	\begin{algorithmic}[1]
-		\Require $W$: workflow; $C$: number of tasks per jobs; $R$: number of jobs per horizontal level
-		\Procedure{Clustering}{$W,C$}
+		\Require $W$: workflow; $R$: number of jobs per horizontal level
+		\Procedure{Clustering}{$W,R$}
 			\For{$level < depth(W)$}
 				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
+				\State $C \gets TL.size() / R$ \Comment{$C$ is number of tasks per job in this level}
 				\State $CL\gets$  \ \Call{Merge}{$TL,C, R$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
@@ -212,10 +214,11 @@ For simplicity, system overheads are not displayed.
 	\caption{Horizontal Distance Balancing algorithm.}
 	\label{alg:imbalance_hdb}
 	\begin{algorithmic}[1]
-		\Require $W$: workflow; $C$: number of tasks per jobs; $R$: number of jobs per horizontal level
+		\Require $W$: workflow; $R$: number of jobs per horizontal level
 		\Procedure{Clustering}{$W,C$}
 			\For{$level < depth(W)$}
 				\State $TL\gets $\ \Call{GetTasksAtLevel}{$W,level$} \Comment{Partition $W$ based on depth}
+				\State $C \gets TL.size() / R$ \Comment{$C$ is number of tasks per job in this level}
 				\State $CL\gets$  \ \Call{Merge}{$TL,C, R$} \Comment{Returns a list of clustered jobs}
 				\State $W \gets W - TL + CL$  \Comment{Merge dependencies as well} 
 			\EndFor
