@@ -15,7 +15,7 @@ Laser Interferometer Gravitational Wave Observatory (LIGO)~\cite{LIGO} workflows
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.6\linewidth]{figure14.pdf} \\
+	\includegraphics[width=0.5\linewidth]{figure14.pdf} \\
 	\caption{A simplified visualization of the LIGO Inspiral workflow.}
 	\label{fig:evaluation_shape_ligo}
 \end{figure}
@@ -25,7 +25,7 @@ Montage~\cite{Berriman2004} is an astronomy application that is used to construc
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.55\linewidth]{figure15.pdf} \\
+	\includegraphics[width=0.4\linewidth]{figure15.pdf} \\
 	\caption{A simplified visualization of the Montage workflow.}
 	\label{fig:evaluation_shape_montage}
 \end{figure}
@@ -35,7 +35,7 @@ CyberShake~\cite{Graves2010} is a seismology application that calculates Probabi
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figure16.pdf} \\
+	\includegraphics[width=0.55\linewidth]{figure16.pdf} \\
 	\caption{A simplified visualization of the CyberShake workflow.}
 	\label{fig:evaluation_shape_cybershake}
 \end{figure}
@@ -45,17 +45,17 @@ The Epigenomics workflow~\cite{Epigenome} is a data-parallel workflow. Initial d
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\linewidth]{figure17.pdf} \\
+	\includegraphics[width=.85\linewidth]{figure17.pdf} \\
 	\caption{A simplified visualization of the Epigenomics workflow with multiple branches.}
 	\label{fig:evaluation_shape_genome}
 \end{figure}
 
 \paragraph{\textbf{SIPHT}}
-The SIPHT workflow~\cite{SIPHT} conducts a wide search for small untranslated RNAs (sRNAs) that regulates several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using Pegasus~\cite{Deelman2004}. These involve the prediction of $\rho$-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools~\cite{BLAST}) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown in Figure~\ref{fig:evaluation_shape_sipht}. 
+The SIPHT workflow~\cite{SIPHT} conducts a wide search for small untranslated RNAs (sRNAs) that regulates several processes such as secretion or virulence in bacteria. The kingdom-wide prediction and annotation of sRNA encoding genes involves a variety of individual programs that are executed in the proper order using Pegasus~\cite{Deelman2004}. These involve the prediction of $\rho$-independent transcriptional terminators, BLAST (Basic Local Alignment Search Tools) comparisons of the inter genetic regions of different replicons and the annotations of any sRNAs that are found. A simplified structure of the SIPHT workflow is shown in Figure~\ref{fig:evaluation_shape_sipht}. 
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figure18.pdf} \\
+	\includegraphics[width=0.6\linewidth]{figure18.pdf} \\
 	\caption{A simplified visualization of the SIPHT workflow.}
 	\label{fig:evaluation_shape_sipht}
 \end{figure}
@@ -332,8 +332,6 @@ HC has nearly constant performance despite of the average data size, due to its 
 
 Figures~\ref{fig:evaluation_resource_1} and~\ref{fig:evaluation_resource_2} show the performance gain $\mu$ when varying the number of available VMs for the LIGO workflows with an average data size of 5MB (CPU-intensive) and 500MB (data-intensive) respectively. In high contention scenarios (small number of available VMs), all methods perform similar when the application is CPU-intensive (Figure~\ref{fig:evaluation_resource_1}), i.e., runtime variance and data dependency have smaller impact than the system overhead (e.g. queuing time). As the number of available resources increases, and the data size is too small, runtime variance has more impact on the application's performance, thus HRB performs better than the others. Note that as HDB captures strong connections between tasks, it is less sensitive to the runtime variations than HIFB, thus it yields better performance. For the data-intensive case (Figure~\ref{fig:evaluation_resource_2}), data dependencies have more impact on the performance than the runtime variation. In particular, in the high contention scenario HDB performs poor clustering leading the system to data locality problems compared to HIFB due to the interdependent branches in the LIGO workflow. However, the method still improves the execution due to the high system overhead. Similarly to the CPU-intensive case, under low contention, runtime variance increases its importance and then HRB performs better.
 
-To show the performance of our algorithms in a larger scale, we increase the number of tasks in LIGO to be 8,000 (but following the same structure roles in the Workflow Generator~\cite{WorkflowGenerator}) and simulate the execution with 200~1,800 VMs. The reason we choose 1,800 as the maximum number of VMs in this example is this LIGO workflow has a width of 1892 (the maximum number of tasks at the same workflow level). There is little need to perform task clustering if we have more VMs than the width of the workflow. Figure~\ref{fig:evaluation_resource_3} shows the performance gain over baseline execution with different number of resources for the LIGO workflow with 8,000 tasks. In a small scale (i.e., with 200 VMs), HRB and HDB slightly perform better than the other methods. However, in a larger scale (i.e, with 1800 VMs), HDB performs much better than the others. The reason is similar to the case in Figure~\ref{fig:evaluation_resource_2}. HRB performs worse in a larger scale since the runtime imbalance is no longer a major issue (HRV is much smaller with many tasks) and thus the dependency imbalance becomes the bottleneck. Within the two dependency-oriented optimization methods, HDB performs better than HIFB since HDB captures the strong connection between tasks (distance) while HIFB uses Impact Factor based metrics to capture the structural similarity. 
-
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{figure22.eps}
@@ -347,6 +345,10 @@ To show the performance of our algorithms in a larger scale, we increase the num
 	\captionof{figure}{Experiment 2: performance gain ($\mu$) over baseline execution with different number of resources for the LIGO workflow (average data size is 500MB).}
 	\label{fig:evaluation_resource_2}
 \end{figure}
+
+To evaluate the performance of our algorithms in a larger scale scenario, we increase the number of tasks in LIGO to 8,000 (following the same structure rules enforced by the WorkflowGenerator toolkit) and simulate the execution with $[200,1800]$ VMs. We choose 1,800 as the maximum number of VMs because the LIGO workflow has a maximum width of 1892 tasks (at the same level). 
+%There is little need to perform task clustering if we have more VMs than the width of the workflow.
+Figure~\ref{fig:evaluation_resource_3} shows the performance gain over baseline execution with different number of resources for the LIGO workflow. In a small scale (i.e., 200 VMs), HRB and HDB perform slightly better than the other methods. However, as the scale increases, HDB outperforms the other methods. Similarly to the results obtained in Figure~\ref{fig:evaluation_resource_2}, HRB performs worse in larger scales since the runtime imbalance is no longer a major issue (HRV is too small) and thus the dependency imbalance becomes the bottleneck. Within the two dependency-oriented optimization methods, HDB outperforms HIFB since HDB captures the strong relation between tasks (distance), while HIFB uses the impact factor based metrics to capture the structural similarity. 
 
 \begin{figure}[!htb]
 	\centering
@@ -398,7 +400,10 @@ The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:eva
 Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigenomics workflow (see Figure~\ref{fig:evaluation_vc_genome}) are better when VC is performed \emph{a priori}. This is due to several pipelines inherent to the workflow structure (Figure~\ref{fig:evaluation_shape_genome}). However, vertical clustering has poorer performance if it is performed prior to the HDB algorithm. The reason is the average task runtime of Epigenomics is much larger than other workflows as shown in Table.~\ref{tab:evaluation_workflows}. Therefore, \emph{VC-prior} generates very large clustered jobs vertically and makes it difficult for horizontal methods to improve further. 
 
 
-In a word, these experiments show strong connections between the imbalance metrics and the performance improvement of the balancing methods we proposed. HRV indicates the potential performance improvement for HRB. The higher HRV is, the more performance improvement HRB is likely to have. Similarly, for symmetric workflows (such as Epigenomics), their HIFV and HDV values are low and thus neither HIFB or HDB performs well. With all of this knowledge, we create a simple decision tree in Figure~\ref{fig:decision_tree} that can be used for choosing an appropriate horizontal method given a workflow. 
+\subsection{Compilation of the results}
+
+The experimental results show strong relations between the proposed imbalance metrics and the performance improvement of the balancing methods. HRV indicates the potential performance improvement for HRB. The higher HRV, the more performance improvement HRB is likely to have. Similarly, for workflows with symmetric structures (such as Epigenomics) where HIFV and HDV values are low, neither HIFB nor HDB performs well.
+\note{With all of this knowledge, we create a simple decision tree in Figure~\ref{fig:decision_tree} that can be used for choosing an appropriate horizontal method given a workflow. \textbf{We need to discuss about the decision tree figure.}}
 
 
 \begin{figure}[!htb]

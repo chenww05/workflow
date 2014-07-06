@@ -3,6 +3,12 @@
 
 Task clustering has been widely used to address the low performance of very short running tasks on platforms where the system overhead is high, such as distributed computing infrastructures. However, up to now, techniques do not consider the load balance problem. In particular, merging tasks within a workflow level without considering the runtime variance may cause load imbalance (Runtime Imbalance), or merging tasks without considering their data dependencies may lead to data locality problems (Dependency Imbalance). In this section, we introduce metrics that quantitatively capture workflow characteristics to measure runtime and dependence imbalances. We then present methods to handle the load balance problem.
 
+\begin{figure}[!t]
+\centering
+ \includegraphics[width=0.55\linewidth]{figure4.pdf}
+  \captionof{figure}{An example of vertical clustering.}
+  \label{fig:model_vc}
+\end{figure}
 
 \subsection{Imbalance metrics}
 
@@ -272,8 +278,8 @@ There are cases where HDB would yield lower performance than HIFB. For instance,
 	\label{fig:imbalance_hifb_hdb}
 \end{figure}
 
-%In conclusion, these balancing methods have different preference on the selection of a candidate job to be merged with the targeting task. HIFB tends to group tasks that share similar position/importance to the workflow structure. HDB tends to group tasks that are closed to each other to reduce data transfers. 
-Table~\ref{tab:2} summarizes the imbalance metrics and balancing methods presented in this paper. 
+%In conclusion,  
+Table~\ref{tab:2} summarizes the imbalance metrics and balancing methods introduced in this section. These balancing methods have different preference on the selection of a candidate job to be merged. For instance, HIFB tends to group tasks that share similar importance to the workflow structure, while HDB tends to group tasks that reduce data transfers.
 
 \begin{figure}[htb]
 	\centering
