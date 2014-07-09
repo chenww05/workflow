@@ -10,12 +10,12 @@ In the future, we plan to further analyze the imbalance metrics proposed. For in
 
 Also, as shown in Figure~\ref{fig:evaluation_vc_genome}, \emph{VC-prior} can generate very large clustered jobs vertically and makes it difficult for horizontal methods to improve further. Therefore, we aim to develop imbalance metrics for \emph{VC-prior} to avoid generating large clustered jobs, i.e., based on the accumulated runtime of tasks in a pipeline. 
 
-
 As shown in our experiment results, the combination of our balancing methods with vertical clustering have different sensitivity to workflows with distinguished graph structures and runtime distribution. Therefore, a possible future work is the development of a portfolio clustering, which chooses multiple clustering algorithms, and dynamically selects most suitable one according to the dynamic load.
 
-In this paper, we demonstrate the performance gain of combining horizontal clustering methods and vertical clustering. We plan to combine multiple algorithms together instead of just two. We will develop a policy engine that iteratively chooses one algorithm from all of the balancing methods based on the imbalance metrics until the performance gain converges. 
+%In this manuscript, we demonstrate the performance gain of combining horizontal clustering methods and vertical clustering. We plan to combine multiple algorithms together instead of just two. We will develop a policy engine that iteratively chooses one algorithm from all of the balancing methods based on the imbalance metrics until the performance gain converges. 
 
 Finally, we aim at applying our metrics to other workflow study areas, such as workflow scheduling where heuristics would either look into the characteristics of the task when it is ready to schedule (local scheduling), or examine the entire workflow (global optimization algorithms). In this work, the impact factor metric only uses a family of tasks that are tightly related or similar to each other. This method represents a new approach to solve the existing problems. 
 
-\section{Acknowledgements}
-This work is funded by NSF IIS-0905032 and NSF FutureGrid 0910812. We thank Gideon Juve, Karan Vahi, Rajiv Mayani, and Mats Rynge for their help. 
+\section*{Acknowledgements}
+\footnotesize
+This work was funded by NSF IIS-0905032 and NSF FutureGrid 0910812 awards. We thank Gideon Juve, Karan Vahi, Rajiv Mayani, and Mats Rynge for their valuable help. 

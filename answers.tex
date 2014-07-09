@@ -74,7 +74,6 @@ There is a gap in all proposed algorithms (No. 1,2,3). Authors introduce two inp
 
 \begin{review}
 The authors say that : ``In this paper, we focus on novel quantitative metrics that are able to demonstrate the imbalance problem in scientific workflows.'' Load imbalance in parallel execution is unavoidable in any real situation, so showing it happens in scientific workflows is somehow expected.
-
 \end{review}
 
 \answer{The sentence was rewritten to highlight the contribution of our work with respect to the literature:
@@ -92,14 +91,14 @@ The paper focus on scientific workflows to state what are the main imbalance iss
 According to the Introduction Section, ``The quantitative metrics and balancing methods were introduced and evaluated in [16] on five workflows.'' However, it was difficult to identify the ``novel quantitative metrics'' as the paper's contribution along the paper. 
 \end{review}
 
-\answer{This manuscript is an extension of our previous paper published in a conference [16]. The term ``novel'' in this context means that these metrics were not used in any work before ours. We removed the term to avoid misunderstandings.}
+\answer{This manuscript is an extension of our previous paper published in a conference [16]. The term ``novel'' in this context means that these metrics were not used in any work before ours. We removed the term to avoid misunderstandings. The main contributions of this manuscript are summarized in the introduction section: \revised{In this manuscript, we complement this previous work by studying (i) the performance gain of using our balancing methods over a baseline execution on a larger set of workflows; (ii) the performance gain over two additional task clustering methods from the literature; (iii) the performance impact of the variation of the average data size and number of resources; and (iv) the performance impact of combining our balancing methods with vertical clustering}.}
 
 
 \begin{review}
 It seems that in this paper the authors evaluate previous results on different scenarios and made some comparisons with task based clustering techniques from the literature, and finally combined the balancing methods with a vertical clustering technique. One of the difficulties is generalizing the results. There is a rich set of simulation results, but combining them within the load imbalance problem is difficult. What are the heuristics that should be followed? What should be done when designing a scientific workflow load balancing algorithm? The contribution presented in this paper is fragmented, which makes it difficult to take advantage of the results from the simulated experiments. 
 \end{review}
 
-\answer{We added a decision tree to the end of the evaluation section that combines all the balancing methods proposed in this work into a single heuristic.}
+\answer{We added a decision tree to the end of the evaluation section that combines all the balancing methods proposed in this work into a single heuristic. We believe that this decision tree may drive the development of police engines to interactively select a balancing method.}
 
 
 \begin{review}
@@ -127,7 +126,7 @@ The number of single core VMs = 20 is disappointing in a load imbalance evaluati
 The results are all shown as performance gains over the baseline. The balancing ``accuracy'' was not evaluated. For example, idleness in processing nodes is typically measured when evaluating load balancing techniques. It is important to know the precision of the imbalance prediction, since there are so many execution situations that may incur in imbalance (CPU performance, IO operations, data skew like non-uniform selectivity or similarity in specific values). For example, some load balancing systems (e.g. Falkon) show limitations of load balancing under failures or when facing unpredictable task execution times. What is the overhead for imbalance prediction ? It seems that the algorithms already have a task performance value distribution before the execution and this sampling/prediction time was not considered while comparing with baseline.
 \end{review}
 
-\answer{The focus of this work is not to address the main imbalance issues during parallel scientific workflow execution. Instead, we focus on developing imbalance metrics to improve the perforamnce of task clustering (in terms of the overall runtime) in a way that the task groups are more balanced (e.g. runtime or data dependency), and thus system overheads such as queuing time and data transfer are reduced. The title of the manuscript has been changed to ``Using Imbalance Metrics to Optimize Task Clustering in Scientific Workflow Executions'' to better reflect the focus of our work. Also, we changed some sentences in the introduction to highlight our main focus and contributions.}
+\answer{As stated in a previous answer, the focus of this work is not to address the main imbalance issues during workflow execution, but the development of imbalance metrics to improve the performance of task clustering. We consider that the evaluation of the imbalance prediction is out of the scope of this work.}
 
 
 

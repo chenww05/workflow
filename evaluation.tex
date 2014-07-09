@@ -393,23 +393,19 @@ Figure~\ref{fig:evaluation_vc_montage} shows the performance gain $\mu$ for the 
 
 The performance gain $\mu$ for the LIGO workflow is shown in Figure~\ref{fig:evaluation_vc_ligo}. Vertical clustering yields better performance gain when it is performed prior to horizontal clustering (\emph{VC-prior}). The LIGO workflow structure (Figure~\ref{fig:evaluation_shape_ligo}) has several pipelines that are primarily clustered vertically and thus system overheads (e.g. queuing and scheduling times) are reduced. Furthermore, the runtime variance (HRV) of the clustered pipelines increases, thus the balancing methods, in particular HRB, can further improve the runtime performance by evenly distributing task runtimes among clustered jobs. When vertical clustering is performed \emph{a posteriori}, pipelines are broken due to the horizontally merging of tasks between pipelines neutralizing vertical clustering improvements.
 
-
-
-
-
 Similarly to the LIGO workflow, the performance gain $\mu$ values for the Epigenomics workflow (see Figure~\ref{fig:evaluation_vc_genome}) are better when VC is performed \emph{a priori}. This is due to several pipelines inherent to the workflow structure (Figure~\ref{fig:evaluation_shape_genome}). However, vertical clustering has poorer performance if it is performed prior to the HDB algorithm. The reason is the average task runtime of Epigenomics is much larger than other workflows as shown in Table.~\ref{tab:evaluation_workflows}. Therefore, \emph{VC-prior} generates very large clustered jobs vertically and makes it difficult for horizontal methods to improve further. 
 
 
 \subsection{Compilation of the results}
 
 The experimental results show strong relations between the proposed imbalance metrics and the performance improvement of the balancing methods. HRV indicates the potential performance improvement for HRB. The higher HRV, the more performance improvement HRB is likely to have. Similarly, for workflows with symmetric structures (such as Epigenomics) where HIFV and HDV values are low, neither HIFB nor HDB performs well.
-\note{With all of this knowledge, we create a simple decision tree in Figure~\ref{fig:decision_tree} that can be used for choosing an appropriate horizontal method given a workflow. \textbf{We need to discuss about the decision tree figure.}}
 
+Based on the conclusions of the experimental evaluation, we applied machine learning techniques on the result data to build a decision tree that can be used to drive the development of police engines to interactively select a balancing method. Although our decision tree is tightly coupled to our results, it can be used by online systems that implement the MAPE-K loop~\cite{daSilva:2013:TFO:2534248.2534254,FerreiradaSilva-CCPE-2014,FerreiradaSilva-FGCS-2013}, which will adjust the tree according to the system behavior.
 
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1.0\linewidth]{tree.pdf}
-	\captionof{figure}{Decision Tree}
+	\captionof{figure}{Decision tree for selection of the appropriate balancing method.}
 	\label{fig:decision_tree}
 \end{figure}
 
