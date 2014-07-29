@@ -56,14 +56,14 @@ There happen some minor language errors from time to time, but nothing serious.
 There are some places where article requires reorganization: e.g. description of table 2 and the text of paragraph are one-sentence short and almost identical giving the impression that the table has two identical signatures one at the top and on the bottom. 
 \end{review}
 
-\answer{We improved the descriptions of the tables and the paragraph texts to avoid this problem of identical signatures.}
+\answer{We improved the descriptions of the tables and the paragraph to avoid this problem of identical signatures.}
 
 
 \begin{review}
 There is a gap in all proposed algorithms (No. 1,2,3). Authors introduce two input parameters that control algorithms: First, C - maximum allowed number of tasks per job and second R - maximum allowed number of jobs per horizontal level of the directed acyclic graph of  the workflow. In the case of mismatched values of C and R (e.g. too small values of both parameters in relation to number of tasks at some level of the workflow DAG) algorithm would miss some tasks. For comparison, algorithms cited from literature (4,5,6) do not have this problem.
 \end{review}
 
-\answer{In practice, either C or R will be set and we get the other parameter by following C$\times$R = the total number of tasks in a level. Usually we would set the R to be one or two times of the number of available VMs and our prior work[16] has evaluated the performance with different graunlarity. We perform task clustering in a level by level approach and thus the pair of C and R are calculated in level. We fixed the description of the three algorithms. }
+\answer{We fixed the description of the three algorithms.. In practice, either C or R will be set and we get the other parameter by following C$\times$R = the total number of tasks in a level (as shown in Algorithm 1). Usually we would set the R to be one or two times of the number of available VMs and our prior work[16] has evaluated the performance with different graunlarity. We perform task clustering in a level by level approach and thus the pair of C and R are calculated within the level.}
 
 
 % Reviewer 2
@@ -112,14 +112,14 @@ One of the new results is exploring vertical clustering, but as the authors ment
 In the Related Work Section, it seems that the main difference between related work and the paper's contribution is taking data dependency into account. This is an important issue in scientific workflows, but there are several other aspects in a data-flow execution, which is typical in scientific workflows, in addition to data locality. For example, the techniques only consider imbalance on task's execution time. However, data skew is also critical in data-flows like scientific workflows. Different input data partitioning has not been evaluated. Even if the workflow input data is uniformly distributed among horizontal clusters or vertical clusters, that does not guarantee uniform execution time along the data-flow running on the workflow tasks. Predicting these data skew situations depends on previous knowledge of data characteristics. Differences on data convergence, similarity and other data properties may lead to poor load balance, all very complex to predict before the execution, even through sampling. The experiments only evaluate differences in data size, but not in data value distribution, like data skew. Please show experimental results with better data, such as in the presence of data skew.
 \end{review}
 
-\answer{We agree that data skew is also critical, but we did not focused in the development of techniques to address this specific problem in this work. However, our experimental dataset is based on real workflow execution traces, and the data distribution is not uniform. It is possible that data skew may arise when synthetic workflows are generated. We plan to consider the development of specific techniques to address data skew in the future.}
+\answer{We agree that data skew is also important, but it is not the only source of imbalance. Our experimental dataset is based on real workflow execution traces, and the data distribution is not uniform. It is possible that data skew may arise when synthetic workflows are generated.}
 
 
 \begin{review}
 The number of single core VMs = 20 is disappointing in a load imbalance evaluation, since balancing becomes more complex as more cores or VMs are added. The motivation of the paper if for large scale executions. The explanation of using 20 single core VMs (account limitations in Amazon) is not convincing. The results of Fig 22 make it evident that as more VMs are added, the gains decrease. Considering the decrease rate in performance gains from 2 to 20 VMs, shown in Fig 22, it seems that no gain would be obtained after 40 VMs, which is still small scale. Considering all VM homogeneous is also unrealistic, even in cloud providers that guarantee a specific performance. Since the experiments are done by simulation, using more VM should not be a problem. Please show experimental results with better data, such as at larger scale. 
 \end{review}
 
-\answer{We agree that 20 virtual machines do not represent large-scale execution. We used this amount of VMs for the sake of simplicity. We conducted a new experiment (Fig. 24) where we vary the number of VMs between 200 and 1800 and show that the results are proportional equivalent to the ones obtained with 20 VMs.}
+\answer{We agree that 20 virtual machines do not represent large-scale execution. We used this amount of VMs for the sake of simplicity. We conducted a new experiment (Fig. 24) where we vary the number of VMs between 200 and 1800 and show that the results are proportional equivalent to the ones obtained with 20 VMs. This result confirms that the same imbalance properties are present in the case of 20 VMs.}
 
 
 \begin{review}
