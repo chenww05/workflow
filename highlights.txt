@@ -1,1 +1,3 @@
-•	Generalize the runtime imbalance and dependency imbalance problem in task clustering•	Propose imbalance metrics to improve task clustering 
+The highlights of this paper include:
+1.Generalize the runtime imbalance and dependency imbalance problem in task clustering2.Propose quantitative imbalance metrics to improve task clustering 
+3.Evaluate the imbalance metrics and balanced task clustering methods with five workflows
