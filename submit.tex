@@ -991,9 +991,13 @@ Based on the conclusions of the experimental evaluation, we applied machine lear
 
 We presented three {task clustering methods that try to balance the workload across clusters and two vertical clustering variants. }We also defined three imbalance metrics to quantitatively measure workflow characteristics based on task runtime variation (HRV), task impact factor (HIFV), and task distance variance (HDV).
 
-Three {sets of }experiment sets were conducted using traces from five real workflow applications. The first experiment aimed at measuring the performance gain over a baseline execution without clustering. In addition, we compared our balancing methods with three algorithms {described }in literature. Experimental results show that our methods yield {a }significant improvement over a baseline execution, and that they have acceptable performance when compared to {the }performance of the existing algorithms. The second experiment measured the influence of {the }average data size and {the }number of available resources on the performance gain. In particular, results show{ed }that our methods have different sensitivity to data- and computational-intensive workflows. \rev{Also, the experiment with a large number of VMs shows that HDB presents nearly constant performance improvement over the baseline, while all other methods show a slow down in performance gain. }Finally, the last experiment evaluated the {benefit }of performing horizontal and vertical clustering in the same workflow. Results show{ed }that vertical clustering can significantly improve pipeline-structured workflows, {but that }it is not suitable if the workflow has no explicit pipelines.
+Three sets of experiment sets were conducted using traces from five real workflow applications. The first experiment aimed at measuring the performance gain over a baseline execution without clustering. In addition, we compared our balancing methods with three algorithms described in literature. Experimental results show that our methods yield a significant improvement over a baseline execution, and that they have acceptable performance when compared to the performance of the existing algorithms. The second experiment measured the influence of the average data size and the number of available resources on the performance gain. In particular, results showed that our methods have different sensitivity to data- and computational-intensive workflows. Finally, the last experiment evaluated the benefit of performing horizontal and vertical clustering in the same workflow. Results showed that vertical clustering can significantly improve pipeline-structured workflows, but that it is not suitable if the workflow has no explicit pipelines.
 
-The simulation{-}based evaluation also show{ed }that the performance improvement of the proposed balancing algorithms (HRB, HDB and HIFB) is highly related to the metric values (HRV, HDV and HIFV) that we introduced. For example, a workflow with high HRV tends to have better performance improvement with HRB since HRB is used to balance the runtime variance. 
+{We also studied the performance gains of all the proposed horizontal methods with the increase of the number of VMs. Figure~\ref{fig:evaluation_resource_2} shows that HIFB mostly performs better than the other methods with a small number of VMs (5$\sim$25).  However, with the increase of the scale (using a large number of VMs, from 200 to 1800) as indicated in Figure~\ref{fig:evaluation_resource_3}, HDP presents nearly constant performance improvement over the baseline (around 40\%), while all other methods including HIFB have dropped to around 4\%.  This evidences the superiority of the proposed methods as opposed to the baseline, which becomes clearer as the number of VMs increases. 
+%show a slow down in performance gain. 
+ }
+
+The simulation-based evaluation also showed that the performance improvement of the proposed balancing algorithms (HRB, HDB and HIFB) is highly related to the metric values (HRV, HDV and HIFV) that we introduced. For example, a workflow with high HRV tends to have better performance improvement with HRB since HRB is used to balance the runtime variance. 
 
 In the future, we plan to further analyze the imbalance metrics proposed. For instance, the values of {the }metrics presented in this paper are not normalized, and thus their values per level (HIFV, HDV, and HRV) are {at }different scales. Also, we plan to analyze more workflow applications, particularly the ones with asymmetric structures, to investigate the relationship between workflow structures and the metric values. 
 
@@ -1063,7 +1067,7 @@ N.~Muthuvelu, I.~Chai, E.~Chikkannan, R.~Buyya, On-line task granularity
   2010, pp. 266--277.
 
 \bibitem{Muthuvelu2013170}
-N.~Muthuvelu, C.~Vecchiolab, I.~Chaia, E.~Chikkannana, R.~Buyyab, Task
+N.~Muthuvelu, C.~Vecchiolab, I.~Chai, E.~Chikkannana, R.~Buyya, Task
   granularity policies for deploying bag-of-task applications on global grids,
   Future Generation Computer Systems 29~(1) (2012) 170 -- 181.
 
@@ -1122,7 +1126,7 @@ P.-O. OÃàstberg, E.~Elmroth, Mediation of service overhead in service-oriented
 
 \bibitem{Prodan2008}
 R.~Prodan, T.~Fabringer, Overhead analysis of scientific workflows in grid
-  environments, in: IEEE Transactions in Parallel and Distributed System,
+  environments, in: IEEE Transactions in Parallel and Distributed Systems,
   Vol.~19, 2008.
 
 \bibitem{Stratan2008}

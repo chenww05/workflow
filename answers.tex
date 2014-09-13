@@ -51,9 +51,10 @@ The authors have followed all recommendations and the paper has improved signifi
 severe as new processing units are added, this new experiment was able to show that, depending on the number of VMs, the best method, in Fig 23, changed significantly to the best method shown in the new Fig 24, for applications that are both data and CPU-intensive. Therefore, I believe these changes on the methods' performance along this new scenario (Fig. 24) will be very useful for the literature and more in sync with FGCS papers, particularly the SI on SWEET.
 Therefore, as a very minor revision, I believe it is important to state some findings on large-scale experiments with applications that are both data and cpu-intensive, at the Conclusions or Compilation of Results (Section 5.5).\end{review}
 
-\answer{We added a conclusion in Section 6:}
+\answer{We added a paragraph in Section 6 as suggested:}
 
-\revised{``Also, the experiment with a large number of VMs shows that HDB presents nearly constant performance improvement over the baseline, while all other methods show a slow down in performance gain. ''}
+\revised{``We also studied the performance gains of all the proposed horizontal methods with the increase of the number of VMs. Figure 23 shows that HIFB mostly performs better than the other methods with a small number of VMs (5$\sim$25).  However, with the increase of the scale (VM has increased from 200 to 1800) as indicated in Figure 24, HDP presents nearly constant performance improvement over the baseline (around 40\%), while all other methods including HIFB have dropped to around 4\%.  This evidences the superiority of the proposed
+methods as opposed to the baseline, which becomes clearer as the number of VMs increases.''}
 
 
 
